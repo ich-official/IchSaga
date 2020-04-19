@@ -7,7 +7,7 @@ If you have some great ideas about this game, send e-mail to ich_official@163.co
 ### Apr 19th 2020
   commit base files like ProjectSettings etc...
 
-================CHINESE VER.=======================
+# ===========CHINESE VER.==============
 
 这是一个独立游戏，作者是Ich（我自己），使用Unity3D开发。
 
