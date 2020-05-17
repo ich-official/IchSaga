@@ -23,7 +23,9 @@ public enum UIWindowType
     NONE,
     LOGIN,
     REG,
-    PLAYERINFO
+    PLAYERINFO,
+    EnterServer,    //进入大区，开始游戏
+    SelectServer    //选择大区
 
 }
 #endregion

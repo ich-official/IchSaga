@@ -24,6 +24,7 @@ public class ResourcesManager : SingletonBase<ResourcesManager>
         UIOTHER,   //其他，目前包括模型头顶UI
         UIRoot,    //UI场景，总UI父节点
         UIPanel,   //UIPanel，挂载在container容器下
+        UIItem,     //UIItem，各个panel下需要生成的小选项
         UI_SCENE,   //UI场景,NGUI使用，目前已弃用
         UI_WINDOW  //UI窗体,NGUI使用，目前已弃用
     }
@@ -71,6 +72,9 @@ public class ResourcesManager : SingletonBase<ResourcesManager>
                     break;
                 case ResourceType.UIOTHER:
                     sb.Append("UIPrefabs/UIOthers/");
+                    break;
+                case ResourceType.UIItem:
+                    sb.Append("UIPrefabs/UIItems/");
                     break;
                 //以下是NGUI时的路径，目前已弃用
                 case ResourceType.UI_SCENE:

@@ -54,10 +54,10 @@ public class SceneLoadingController : MonoBehaviour
         switch (SceneManager.Instance.currentSceneName)
         {
             case SceneName.LOGIN5X:
-                sceneName = "Leo_Login5x";
+                sceneName = "Login5x";
                 break;
             case SceneName.MAINSCENE5X:
-                sceneName = "Leo_Main5x";
+                sceneName = "Main5x";
                 break;
         }
 

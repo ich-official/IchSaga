@@ -22,8 +22,15 @@ public class LogUtil{
         Msg=3,    //打印报错、警告、常规信息
         Test=4,   //打印报错、警告、常规信息、测试内容
     }
-    public static LogLevel logLevel = LogLevel.Error;    //默认打印错误log
-
+#if SINGLE_MODE && UNITY_EDITOR
+    private static LogLevel logLevel = LogLevel.Test;    //编辑器单机模式时调整为test模式
+#else
+    private static LogLevel logLevel = LogLevel.Error;    //默认打印错误log
+#endif
+    public static void SetLogLevel(LogLevel level)
+    {
+        logLevel = level;
+    }
     public static void LogError(object message){
         if(logLevel>=LogLevel.Error)     Debug.LogError("IchSaga,Error:"+message);
     }

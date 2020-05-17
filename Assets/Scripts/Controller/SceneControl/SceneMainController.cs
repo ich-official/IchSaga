@@ -36,7 +36,7 @@ public class SceneMainController : MonoBehaviour {
     {
         //Clone player
         GameObject obj = null;
-        obj = RoleManager.Instance.LoadRole("Leo_RoleModel_Cike");
+        obj = RoleManager.Instance.LoadRole("RoleModel_Cike");
         obj.transform.position = playerSpawnPoint.position;
         //找到当前player
         GlobalInit.Instance.currentPlayer = obj.GetComponent<PlayerController>();
@@ -48,14 +48,11 @@ public class SceneMainController : MonoBehaviour {
         else
         {
             GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<PlayerController>()));
-        }
-        
-
+        }      
 #else
-        Leo_GlobalInit.Instance.currentPlayer.Init(Leo_RoleType.PLAYER, new Leo_RoleInfoBase() { username = Leo_GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new Leo_PlayerAI_Battle(obj.GetComponent<Leo_PlayerController>()));
+        GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<PlayerController>()));
 #endif
 
-        //Leo_GlobalInit.Instance.currentPlayer.ToIdle();
         Leo_UIPlayerInfo.Instance.SetPlayerInfo();
 
         //46课以后异步累加加载后，判断后一个场景是否加载完毕
@@ -66,7 +63,6 @@ public class SceneMainController : MonoBehaviour {
     }
 
     //点击UI时，人物还是会移动，增加UICamera的判断，当点击UI时，不让人物移动
-    //25课后改名OnPlayerClick
     void OnPlayerClick()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -92,11 +88,6 @@ public class SceneMainController : MonoBehaviour {
                         GlobalInit.Instance.currentPlayer.viewedEnemy = null;
                         GlobalInit.Instance.currentPlayer.ToRun(hit.point);
                     }
-                    #region old method  //如果点击了地面，就让人物跑步向目标点，23课以后使用状态机实现
-                    //m_TargetPos = hit.point;
-                    //isRotateDone = false;
-                    //rotateSpeed = 0;
-                    #endregion
                 }
 
             }

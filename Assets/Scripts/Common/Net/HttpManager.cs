@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 /// <summary>
 /// 使用HTTP通信管理类
 /// </summary>
@@ -147,4 +148,6 @@ public class  CallbackArgs{
     public int errorCode;//错误码
     public string errorMsg;//错误信息
     public string json;//服务器返回的json串
+    public ClientEntityBase obj;    //服务器传回一个entity
+    public List<ClientEntityBase> objList;//服务器传回多个entity实体信息的话，传回此list，省去读json的麻烦
 }

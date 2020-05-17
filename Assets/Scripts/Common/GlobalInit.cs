@@ -69,15 +69,22 @@ public class GlobalInit : MonoBehaviour {
     private void SetLogLevel(LogUtil.LogLevel level = LogUtil.LogLevel.Error)
     {
 #if DEBUG_LOG
-        LogUtil.logLevel = LogUtil.LogLevel.Test;
+        LogUtil.SetLogLevel(LogUtil.LogLevel.Test);
 #else
-        Leo_LogUtil.logLevel = level;
+        LogUtil.SetLogLevel();
 #endif
     }
 
 	void Update () {
-	
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("OK");
+            PlayerPrefs.DeleteAll();
+        }
 	}
 
-    
+    void OnDestroy()
+    {
+        SqliteHelper.Instance.Disconnect();
+    }
 }

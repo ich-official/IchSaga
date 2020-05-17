@@ -31,7 +31,7 @@ public class EnemySpawnPoint : MonoBehaviour {
             {
                 mPrevSpawnTime = Time.time;
                 //刷怪
-                GameObject obj = RoleManager.Instance.LoadRole("Leo_RoleModel_Xiaobing1");
+                GameObject obj = RoleManager.Instance.LoadRole("RoleModel_Xiaobing1");
 
                 obj.transform.parent = this.transform;
                 obj.transform.position = this.transform.position;

@@ -23,14 +23,19 @@ public class UIPanelViewBase :UIViewBase {
     public float tweenDuration = 1f;
 
     /// <summary>
-    /// UGUI适用，LeoOnDestroy中调用，
+    /// UGUI适用，OnDestroy中调用，
     /// </summary>
-    public System.Action OnViewClose;
+    //public System.Action OnViewClose;
+
+    /// <summary>
+    /// 下一个要打开的UI类型
+    /// </summary>
+    private UIWindowType mNextOpenUIType;
 
     /// <summary>
     /// 是否打开下一个窗口
     /// </summary>
-    private bool isOpenNext = false;
+    //private bool isOpenNext = false;
     /// <summary>
     /// 销毁窗口时不知道要销毁哪个窗口，在这里存一下窗口类型，以便告知destroy哪个
     /// </summary>
@@ -50,7 +55,7 @@ public class UIPanelViewBase :UIViewBase {
         base.OnBtnClick(obj);
         if (obj.name.Equals("ClosePanelButton",System.StringComparison.CurrentCultureIgnoreCase))
         {
-            SelfClose(false);
+            SelfClose();
         }
     }
 
@@ -58,26 +63,33 @@ public class UIPanelViewBase :UIViewBase {
     /// close myself,oops....
     /// 增加bool值，判断是否有下一个打开的窗口
     /// </summary>
-    public virtual void SelfClose(bool OpenNext)
+    public virtual void SelfClose()
     {
-        isOpenNext = OpenNext;
+       // isOpenNext = OpenNext;
         Leo_UIWindowManager.Instance.CloseWindowUI(currentUIType);
+    }
+    public virtual void SelfCloseAndOpenNext(UIWindowType next)
+    {
+        SelfClose();
+        mNextOpenUIType = next;
     }
 
     /// <summary>
     /// 销毁一个窗口时，打开下一个窗口，这种方法在UGUI后不适用，改用委托执行
     /// </summary>
-    protected override void LeoOnDestroy()
+    protected override void BeforeOnDestroy()
     {
         Leo_UIDepthManager.Instance.CheckOpenedWindows();
-        if (isOpenNext)
+        //if (isOpenNext)
+       // {
+        //    if (OnViewClose != null) OnViewClose();
+       // }
+        if ( mNextOpenUIType != UIWindowType.NONE )   //需要打开下一个UI
         {
-            if (OnViewClose != null)
-            {
-                OnViewClose();
-            }
-        }
-        base.LeoOnDestroy();
+            Leo_UIWindowManager.Instance.OpenWindowUI(mNextOpenUIType);
+        }        
+        
+        base.BeforeOnDestroy();
     }
 
 }

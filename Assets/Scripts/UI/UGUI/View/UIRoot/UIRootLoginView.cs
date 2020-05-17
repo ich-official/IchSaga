@@ -25,7 +25,8 @@ public class UIRootLoginView : UIRootViewBase
     private IEnumerator OpenLoginPanel()
     {
         yield return new WaitForSeconds(0.5f);
-        LoginController.Instance.OpenLoginPanel();
+        AccountController.Instance.QuickLogin();
+        //LoginController.Instance.OpenLoginPanel();
     }
 
 }

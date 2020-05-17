@@ -10,6 +10,15 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 /[Aa]ssets/*.meta
+
+#这些是临时屏蔽的，最后全是需要上传的#
+/[Aa]ssets/Docs
+/[Aa]ssets/Download
+/[Aa]ssets/GraphCaches
+/[Aa]ssets/Tree_Textures
+/[Aa]ssets/T4M
+/[Aa]ssets/T4MOBJ
+/[Aa]ssets/Third-Party
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 /[Aa]ssets/**/*.meta
 

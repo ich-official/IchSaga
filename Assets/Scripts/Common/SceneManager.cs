@@ -26,12 +26,12 @@ public class SceneManager : SingletonBase<SceneManager>{
     public void LoadLoginScene()
     {
         currentSceneName = SceneName.LOGIN5X;
-        Application.LoadLevel("Leo_Loading5x");
+        Application.LoadLevel("Loading5x");
     }
     
     public void LoadMainScene()
     {
         currentSceneName = SceneName.MAINSCENE5X;
-        Application.LoadLevel("Leo_Loading5x");
+        Application.LoadLevel("Loading5x");
     }
 }
