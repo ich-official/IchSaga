@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <AssetBundle>
+    <!--name:资源名字 tag：该资源属于哪个大分类下的 version：版本号 topath：把这个资源保存在哪-->
+    <Item Name="Role_MainPlayer" Tag="Role" Version="1.0" Size="0" ToPath="/Role/">
+      <Path LocalPath="Resources\RolePrefab\Player\Role_MainPlayer.prefab"><!--该资源的本地路径--></Path>
+    </Item>
+  
+    <Item Name="GameScene_CunZhuang" Tag="Scene" Version="1.0" Size="0" ToPath="/Scene/">
+      <Path LocalPath="Scene\SceneMap\GameScene_CunZhuang.unity"><!--该资源的本地路径--></Path>
+    </Item>
+  </AssetBundle>
+</Root>
