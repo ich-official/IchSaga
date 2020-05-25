@@ -17,9 +17,20 @@ namespace IchFramework
     /// 框架文件，事件组件
     /// </summary>
     public class EventComponent : IchComponentBase {
+
+        private EventManager mEventManager;
+
+        protected override void OnAwake()
+        {
+            mEventManager = new EventManager();
+            base.OnAwake();
+        }
+
+
         public override void Shutdown()
         {
-
+            mEventManager.Dispose();
+            mEventManager = null;
         }
 
     }

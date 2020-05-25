@@ -19,6 +19,13 @@
 /[Aa]ssets/T4M
 /[Aa]ssets/T4MOBJ
 /[Aa]ssets/Third-Party
+/[Aa]ssets/Plugins
+/[Aa]ssets/RoleModel
+/[Aa]ssets/SceneOthers
+/[Aa]ssets/UIResource
+/[Tt]empExcel
+/[Aa]ssetBundles
+
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 /[Aa]ssets/**/*.meta
 

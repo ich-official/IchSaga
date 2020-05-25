@@ -9,16 +9,21 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 namespace IchFramework
 {
     /// <summary>
     /// 
     /// </summary>
-    public class EventManager :ManagerBase
+    public class EventManager :ManagerBase,IDisposable
     {
 
 
+        public void Dispose()
+        {
+
+        }
     }
 }
 
