@@ -15,13 +15,13 @@ public class PJSettingsWindow : EditorWindow {
 
     public string mDefineSymbol = "";
 
-    public PJSettingsWindow()
+    private void OnEnable()
     {
         //获取自定义宏的内容
         mDefineSymbol = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android);
         mList.Clear();
         mDic.Clear();
-        mList.Add(new SubItem() { name = "DEBUG_NOLOG",displayName="不打印测试log",isDebug=true,isRelease=false});
+        mList.Add(new SubItem() { name = "DEBUG_NOLOG", displayName = "不打印测试log", isDebug = true, isRelease = false });
         mList.Add(new SubItem() { name = "DEBUG_LOG", displayName = "打印测试log", isDebug = true, isRelease = false });
         //正式服，有统计数据接入
         mList.Add(new SubItem() { name = "STAT_TD_NOADS", displayName = "正式服带统计无广告", isDebug = false, isRelease = true });
@@ -43,6 +43,11 @@ public class PJSettingsWindow : EditorWindow {
             }
 
         }
+    }
+
+    public PJSettingsWindow()
+    {
+
     }
     void OnGUI()
     {

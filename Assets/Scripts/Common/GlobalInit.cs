@@ -10,7 +10,7 @@
 
 using UnityEngine;
 using System.Collections;
-using UnityEngine.iOS;
+
 
 /// <summary>
 /// 全局设置，刚进入游戏时要做的各种必要赋值和操作
@@ -71,7 +71,7 @@ public class GlobalInit : MonoBehaviour {
 #if DEBUG_LOG
         LogUtil.SetLogLevel(LogUtil.LogLevel.Test);
 #else
-        LogUtil.SetLogLevel();
+        LogUtil.SetLogLevel(level);
 #endif
     }
 

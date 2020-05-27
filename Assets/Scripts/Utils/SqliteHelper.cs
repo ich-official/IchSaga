@@ -29,7 +29,7 @@ public class SqliteHelper : SingletonBase<SqliteHelper>{
     {
         try
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
             //数据库存放在 Plugins->Android->assets
             //Android平台下persistentDataPath就是这个，但此文件夹不可读写，需要复制到其他位置进行操作，跟解压AB包类似
             string path = Application.dataPath + "/Plugins/Android/assets/" + DBName + ".db";

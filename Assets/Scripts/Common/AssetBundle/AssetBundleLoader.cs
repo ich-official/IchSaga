@@ -26,7 +26,7 @@ public class AssetBundleLoader : IDisposable{
         //1.从路径获取AB资源文件，并转成byte数组
         byte[] buffer = LocalFileManager.Instance.GetBuffer(fullPath);
         //2.把byte[]数组再转成AB资源
-        bundle = AssetBundle.CreateFromMemoryImmediate(buffer);
+        bundle = AssetBundle.LoadFromMemory(buffer);
 
     }
 

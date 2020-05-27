@@ -8,6 +8,7 @@ public class AssetBundleWindow : EditorWindow {
     private AssetBundleDAL mDal;
     private List<AssetBundleEntity> mList;
     private Dictionary<string, bool> mDic;
+    private string XMLPath;
 
     private string[] mType = { "All", "Role", "Scene", "Effect", "Audio", "None" };
     private int typeIndex = 0;
@@ -26,10 +27,9 @@ public class AssetBundleWindow : EditorWindow {
     private int buildTargetIndex = 2;
 #endif
 
-
-    public AssetBundleWindow()
+    public void OnEnable()
     {
-        string XMLPath = Application.dataPath + @"\Editor\AssetBundle\AssetBundleConfig.xml";
+        XMLPath = Application.dataPath + @"\Editor\AssetBundle\AssetBundleConfig.xml";
         mDal = new AssetBundleDAL(XMLPath);
         mList = mDal.GetList();
 
@@ -45,6 +45,10 @@ public class AssetBundleWindow : EditorWindow {
             Debug.Log(list[i].key);
         }
          * */
+    }
+    public AssetBundleWindow()
+    {
+
     }
     Vector2 pos;
     void OnGUI()

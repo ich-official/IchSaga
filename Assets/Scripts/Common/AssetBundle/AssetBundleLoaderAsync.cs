@@ -38,7 +38,7 @@ public class AssetBundleLoaderAsync : MonoBehaviour {
     {
         yield return null;
         byte[] buffer= LocalFileManager.Instance.GetBuffer(mFullPath);
-        request = AssetBundle.CreateFromMemory(buffer);
+        request = AssetBundle.LoadFromMemoryAsync(buffer);
         yield return request;
 
         bundle = request.assetBundle;

@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class EditorUtils  {
 
-    [MenuItem("Tools/Define Symbols Kit")]
+    [MenuItem("IchTools/Define Symbols")]
     public static void ProjectSettings()
     {
         UnityEngine.Debug.Log("hello orz");
@@ -15,7 +15,7 @@ public class EditorUtils  {
     
     }
 
-    [MenuItem("Tools/Build AB Assets")]
+    [MenuItem("IchTools/Build AB Assets")]
     public static void AssetBundleCreate()
     {
         //显示AB打包的窗口
