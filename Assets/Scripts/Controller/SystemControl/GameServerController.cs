@@ -175,6 +175,7 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
         else
         {
             LogUtil.Log(args.json);
+            SceneManager.Instance.LoadMainScene();
         }
     }
     #endregion

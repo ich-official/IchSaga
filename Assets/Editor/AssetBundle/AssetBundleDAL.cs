@@ -41,15 +41,15 @@ public class AssetBundleDAL  {
             entity.key = "LeoTestAB" + itemKey++;
             entity.Name = item.Attribute("Name").Value;
             entity.Tag = item.Attribute("Tag").Value;
-            entity.Version = item.Attribute("Version").Value;
-            entity.Size = item.Attribute("Size").Value.ToLong();
-            entity.ToPath = item.Attribute("ToPath").Value;
+            entity.IsFolder = item.Attribute("IsFolder").Value.Equals("true");
+            entity.IsFirstData= item.Attribute("IsFirstData").Value.Equals("true");
+
             //item下的子标签path，也用集合的形式循环获取
             IEnumerable<XElement> pathList = item.Elements("Path");
             foreach (var path in pathList)
             {
                 //Assets/后面是资源的路径，
-                entity.pathList.Add(string.Format("Assets/{0}", path.Attribute("LocalPath").Value));
+                entity.pathList.Add(string.Format("{0}", path.Attribute("LocalPath").Value));
             }
             mList.Add(entity);
         }

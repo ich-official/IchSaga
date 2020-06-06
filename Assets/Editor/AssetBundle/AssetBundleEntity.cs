@@ -14,11 +14,11 @@ public class AssetBundleEntity
 
     public string Tag;
 
-    public string Version;
+    public bool IsFolder;
 
-    public long Size;
+    public bool IsFirstData;
 
-    public string ToPath;
+    public bool IsChecked;  //界面上是否被打钩
     #endregion
 
     #region XML中item下面子标签的属性集合

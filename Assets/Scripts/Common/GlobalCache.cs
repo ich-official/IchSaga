@@ -15,9 +15,12 @@ using System.Collections;
 /// </summary>
 public class GlobalCache : SingletonBase<GlobalCache>
 {
+    #region 登录注册
     public int Account_CurrentId;   //当前要登陆的账号ID
     public int Account_LastLoginServerId;   //用户上次登陆服务器的ID
     public string Account_LastLoginServerName;  //用户上次登陆服务器的名称
+    #endregion
+
 
 
 }

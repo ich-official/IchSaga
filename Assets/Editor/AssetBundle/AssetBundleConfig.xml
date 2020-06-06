@@ -1,13 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root>
   <AssetBundle>
-    <!--name:资源名字 tag：该资源属于哪个大分类下的 version：版本号 topath：把这个资源保存在哪-->
-    <Item Name="Role_MainPlayer" Tag="Role" Version="1.0" Size="0" ToPath="/Role/">
-      <Path LocalPath="Resources\RolePrefab\Player\Role_MainPlayer.prefab"><!--该资源的本地路径--></Path>
+    <!--name:资源名字 tag：该资源属于哪个大分类下的 IsFolder：是否是一个文件夹 IsFirstData：是否是初次运行必须加载的内容-->  
+    <Item Name="PlayerPrefab" Tag="Role" IsFolder="true" IsFirstData="true">
+      <Path LocalPath="Download\Prefab\RolePrefab\Player\"><!--该资源的本地路径--></Path>
     </Item>
-  
-    <Item Name="GameScene_CunZhuang" Tag="Scene" Version="1.0" Size="0" ToPath="/Scene/">
-      <Path LocalPath="Scene\SceneMap\GameScene_CunZhuang.unity"><!--该资源的本地路径--></Path>
+    <Item Name="NPCPrefab" Tag="Role" IsFolder="true" IsFirstData="true">
+      <Path LocalPath="Download\Prefab\RolePrefab\NPC\"></Path> <!--该资源的本地路径-->
     </Item>
+    <Item Name="EnemyPrefab" Tag="Role" IsFolder="true" IsFirstData="false">
+      <Path LocalPath="Download\Prefab\RolePrefab\Enemy\"></Path><!--该资源的本地路径-->
+    </Item>
+
+    <Item Name="CommonEffect" Tag="Effect" IsFolder="true" IsFirstData="true">
+      <Path LocalPath="Download\Prefab\Effect\Common\"></Path> <!--该资源的本地路径-->
+    </Item>
+    <Item Name="RoleEffect" Tag="Effect" IsFolder="true" IsFirstData="false">
+      <Path LocalPath="Download\Prefab\Effect\Role\"></Path><!--该资源的本地路径-->
+    </Item>
+
+    <Item Name="InitScene" Tag="Scene" IsFolder="false" IsFirstData="true">
+      <Path LocalPath="Download\Scene\InitScene\Scene_SelectRole.unity"></Path>
+      <Path LocalPath="Download\Scene\InitScene\GameScene_HuPaoCun.unity"></Path>
+    </Item>
+    <!--
+    <Item Name="OtherScene" Tag="Scene" IsFolder="false" IsFirstData="false">      
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_ChangAn.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_DiGong1.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_DiGong2.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_HangZhou.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_PingYuan1.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_RongYan1.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_RongYan2.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_RongYan3.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_ShaMo1.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_ShanGu.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_ShanGu2.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_ShanGu3.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_XueDi1.unity"></Path>
+      <Path LocalPath="Download\Scene\CommonScene\GameScene_XueDi2.unity"></Path>
+    </Item>
+    -->
   </AssetBundle>
 </Root>

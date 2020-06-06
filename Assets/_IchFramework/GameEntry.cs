@@ -155,6 +155,7 @@ namespace IchFramework
         void Start()
         {
             InitIchComponent();
+            //Debug.Log(Application.persistentDataPath);
         }
 
         void Update()
@@ -165,6 +166,10 @@ namespace IchFramework
                 current.Value.OnUpdate();
             }
 
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                RemoveUpdate(UICompnt);
+            }
         }
 
         void OnDestroy(){

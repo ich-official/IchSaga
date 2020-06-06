@@ -24,10 +24,11 @@ namespace IchFramework
         }
         public void OnUpdate()
         {
+            //Debug.Log("ui~!");
         }
         public override void Shutdown()
         {
-
+            Debug.Log("UI shutdowm!");
         }
         
     }

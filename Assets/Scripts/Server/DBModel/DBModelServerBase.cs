@@ -1,4 +1,4 @@
-//-----------------------------------------------------------
+ï»¿//-----------------------------------------------------------
 //	Author: Ich
 //  CreateTime: 2020-04-29 02:13:39
 //  Version: 1.0.0
@@ -12,14 +12,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Ä£ÄâÆ÷µÄDBModel»ùÀà
+/// æ¨¡æ‹Ÿå™¨çš„DBModelåŸºç±»
 /// </summary>
 public class DBModelServerBase  {
 
 
-    #region ¹¤¾ß·½·¨
+    #region å·¥å…·æ–¹æ³•
     /// <summary>
-    /// Éú³ÉÒ»¸öerrorMsg²¢¹Ø±ÕÊı¾İ¿â
+    /// ç”Ÿæˆä¸€ä¸ªerrorMsgå¹¶å…³é—­æ•°æ®åº“
     /// </summary>
     public CallbackArgs GenerateErrorMsg(int errorCode=Constant.UNKNOWN,string errorMsg="unknown error!")
     {
@@ -31,15 +31,15 @@ public class DBModelServerBase  {
         return args;
     }
     /// <summary>
-    /// Éú³ÉÒ»¸ösqlÓï¾ä´íÎóµÄ´íÎóĞÅÏ¢£¬´ËÌõºÜ³£ÓÃ
+    /// ç”Ÿæˆä¸€ä¸ªsqlè¯­å¥é”™è¯¯çš„é”™è¯¯ä¿¡æ¯ï¼Œæ­¤æ¡å¾ˆå¸¸ç”¨
     /// </summary>
     /// <returns></returns>
     public CallbackArgs GenerateSqlErrorMsg()
     {
-        return GenerateErrorMsg(Constant.SQL_ERROR, "sql²éÑ¯´íÎó£¡");
+        return GenerateErrorMsg(Constant.SQL_ERROR, "sqlæŸ¥è¯¢é”™è¯¯ï¼");
     }
     /// <summary>
-    /// Éú³ÉÒ»¸öÕıÈ·ĞÅÏ¢²¢¹Ø±ÕÊı¾İ¿â
+    /// ç”Ÿæˆä¸€ä¸ªæ­£ç¡®ä¿¡æ¯å¹¶å…³é—­æ•°æ®åº“
     /// </summary>
     public CallbackArgs GenerateSuccessMsg(List<ClientEntityBase> list=null,string json="empty string")
     {
