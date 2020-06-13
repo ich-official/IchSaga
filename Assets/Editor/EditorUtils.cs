@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using System.IO;
 
 public class EditorUtils  {
 
@@ -24,4 +25,22 @@ public class EditorUtils  {
         win.Show();
         
     }
+
+    [MenuItem("IchTools/Copy FirstData To StreamingAssets")]
+    public static void AssetBundleCopyToStreamingAsstes()
+    {
+        //把初始资源复制到StreamingAssets文件夹内
+        string toPath = Application.streamingAssetsPath + "/AssetBundles/";
+
+        if (Directory.Exists(toPath))
+        {
+            Directory.Delete(toPath, true);
+        }
+        Directory.CreateDirectory(toPath);
+
+        IOUtil.CopyDirectory(Application.persistentDataPath, toPath);
+        AssetDatabase.Refresh();
+        Debug.Log("拷贝完毕");
+    }
+
 }

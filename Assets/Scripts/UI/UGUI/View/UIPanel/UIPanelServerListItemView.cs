@@ -13,7 +13,7 @@ using UnityEngine.UI;
 using System;
 
 /// <summary>
-/// 
+/// 区服列表页
 /// </summary>
 public class UIPanelServerListItemView : MonoBehaviour {
 

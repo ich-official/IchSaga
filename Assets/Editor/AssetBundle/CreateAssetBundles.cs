@@ -4,6 +4,7 @@ using UnityEditor;
 using System.IO;
 
 public class CreateAssetBundles {
+    /*
     [MenuItem("IchTools/Build All Assets")]
     static void BuildAssets()
     {
@@ -13,4 +14,5 @@ public class CreateAssetBundles {
         }
         BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
     }
+    */
 }

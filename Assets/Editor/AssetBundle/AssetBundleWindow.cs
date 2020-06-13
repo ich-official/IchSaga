@@ -100,7 +100,7 @@ public class AssetBundleWindow : EditorWindow {
         {
             EditorApplication.delayCall = OnClearABCallback;
         }
-        if (GUILayout.Button("拷贝数据表", GUILayout.Width(200)))
+        if (GUILayout.Button("拷贝本地配置文件表", GUILayout.Width(200)))
         {
             EditorApplication.delayCall = OnCopyDataTableCallBack;
         }
@@ -185,6 +185,8 @@ public class AssetBundleWindow : EditorWindow {
 
             //相对路径
             string name = fullName.Substring(fullName.IndexOf(mBuildTarget[buildTargetIndex]) + mBuildTarget[buildTargetIndex].Length + 1);
+            //简单写死，以后有需要再修改
+            if(name.Equals("Windows")|| name.Equals("Android")||name.Equals("Android.manifest")) { continue; }
 
             string md5 = EncryptUtil.GetFileMD5(fullName); //文件的MD5
             if (md5 == null) continue;

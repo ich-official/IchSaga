@@ -11,6 +11,7 @@ using UnityEngine;
 using System.Collections;
 using LitJson;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 
@@ -22,7 +23,7 @@ public class AccountControllerServer : SingletonBase<AccountControllerServer>
         //RetValue ret = new RetValue();
         CallbackArgs result;
         JsonData jsonData = JsonMapper.ToObject(jsonStr);
-
+        Dictionary<string, string> conditions = new Dictionary<string, string>();
         //单机模式下省略以下验证过程
         //long t = Convert.ToInt64(jsonData["t"].ToString());
         //string deviceIdentifier = jsonData["deviceIdentifier"].ToString();
@@ -39,20 +40,24 @@ public class AccountControllerServer : SingletonBase<AccountControllerServer>
         int type = Convert.ToInt32(jsonData["Type"].ToString());
         string userName = jsonData["UserName"].ToString();
         string pwd = jsonData["Pwd"].ToString();
+        conditions.Add("Username", jsonData["UserName"].ToString());
+        conditions.Add("Pwd", jsonData["Pwd"].ToString());
         //0:注册  1:登陆
         if (type == 0)
         {
             string channelId = jsonData["ChannelId"].ToString();
-
+            conditions.Add("ChannelId", jsonData["ChannelId"].ToString());
             //注册
-            result=AccountDBModelServer.Instance.Register(userName, pwd, channelId);
+            //result =AccountDBModelServer.Instance.Register(userName, pwd, channelId);
+            result =AccountDBModelServer.Instance.Register(conditions);
 
 
         }
         else
         {
             //登录
-            result = AccountDBModelServer.Instance.Login(userName, pwd);
+            //result = AccountDBModelServer.Instance.Login(userName, pwd);  //sqlite方式
+            result = AccountDBModelServer.Instance.Login(conditions);       //xml方式
 
 
         }

@@ -120,6 +120,8 @@ public class DownloadABMultiThread : MonoBehaviour {
                 fs.Write(www.bytes, 0, www.bytes.Length);   //把文件写到本地路径中
             }
         }
+
+        yield return new WaitForSeconds(0.5f);  //每下载完成一个资源，就等待0.5秒
         //下载成功
         mCurrDownloadSize = 0;  //重置当前下载文件的大小
         mDownloadTotalSize += mCurrDownloadData.Size;    //加一下总大小

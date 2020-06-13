@@ -13,7 +13,7 @@ using System;
 using UnityEngine.UI;
 
 /// <summary>
-/// 
+/// ว๘ทþฯ๊ว้ฃฌ
 /// </summary>
 public class UIPanelServerInfosItemView : MonoBehaviour {
 

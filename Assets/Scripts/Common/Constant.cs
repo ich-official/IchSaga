@@ -43,7 +43,7 @@ public class Constant  {
 
     public const int ACCOUNT_USER_EXIST = 1002; //用户已存在
     public const int ACCOUNT_USER_NOT_EXIST = 1003; //用户不存在
-    public const int ACCOUNT_PWD_WRONG = 1004;  //账户密码错误
+    public const int ACCOUNT_PWD_WRONG = 1004;  //用户名或密码错误
 
     public const int GAMESERVER_NO_SERVER_INFO = 1005;//没有查询到服务器信息
 

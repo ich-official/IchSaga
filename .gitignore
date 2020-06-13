@@ -26,6 +26,8 @@
 /[Aa]ssets/UIResource
 /[Tt]empExcel
 /[Aa]ssetBundles
+/[Uu]nityPackageManager
+/[Aa]ssets/Resources
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 /[Aa]ssets/**/*.meta

@@ -11,6 +11,7 @@ using UnityEngine;
 using System.Collections;
 using LitJson;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 处理区服相关控制机（模拟器）
@@ -29,7 +30,8 @@ public class GameServerControllerServer : SingletonBase<GameServerControllerServ
         switch(type){
             case 0:
                 //获取新区信息
-                result = GameServerDBModelServer.Instance.GetNewGameServer(); 
+                //result = GameServerDBModelServer.Instance.GetNewGameServer(); 
+                result = null;  //此方法暂时用不到
                 break;
             case 1:
                 //获取大区列表
@@ -45,10 +47,14 @@ public class GameServerControllerServer : SingletonBase<GameServerControllerServ
                 break;
             case 4:
                 //更新最后登录的信息
-                int Id = Convert.ToInt32(jsonData["Id"].ToString());
-                int lastServerId = Convert.ToInt32(jsonData["lastLoginServerId"].ToString());
-                string lastServerName =jsonData["lastLoginServerName"].ToString();
-                result = GameServerDBModelServer.Instance.UpdateLastLoginInfo(Id,lastServerId,lastServerName);
+                string Id = jsonData["Id"].ToString();
+                string lastServerId = jsonData["lastLoginServerId"].ToString();
+                string lastServerName = jsonData["lastLoginServerName"].ToString();
+                //Dictionary<string, string> dic = new Dictionary<string, string>();
+                //dic.Add("Id", jsonData["Id"].ToString());
+                //dic.Add("lastLoginServerId", jsonData["lastLoginServerId"].ToString());
+                //dic.Add("lastLoginServerName", jsonData["lastLoginServerName"].ToString());
+                result = GameServerDBModelServer.Instance.UpdateLastLoginInfo(Id, lastServerId,lastServerName);
                 break;
             default:
                 result = null;

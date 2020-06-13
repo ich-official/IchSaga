@@ -41,7 +41,7 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
 
     #region 按钮点击事件
     /// <summary>
-    /// 点击换区按钮的点击事件
+    /// 点击换区按钮的点击事件  OnGameServerClick
     /// </summary>
     /// <param name="p"></param>
     private void GameServerViewChangeServerClick(object[] p)
@@ -82,7 +82,7 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
     #region 请求网络数据
 
     /// <summary>
-    /// 网络请求获取服务器页码
+    /// 网络请求获取服务器页码,
     /// </summary>
     private void GetServerListHttp()
     {
@@ -92,7 +92,7 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
         HttpSimulator.Instance.DoPostSingle(ServerAPI.GameServer, JsonMapper.ToJson(dic), OnGetServerListCallback);
     }
     /// <summary>
-    /// 网络请求全部大区信息
+    /// 网络请求全部大区信息 GetGameServer
     /// </summary>
     private void GetServerInfosHttp()
     {

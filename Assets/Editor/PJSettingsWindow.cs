@@ -13,7 +13,7 @@ public class PJSettingsWindow : EditorWindow {
     //宏名字，开/关
     private Dictionary<string, bool> mDic = new Dictionary<string, bool>();
 
-    public string mDefineSymbol = "";
+    public string mDefineSymbol = "";   //=m_Macor
 
     private void OnEnable()
     {
@@ -29,6 +29,8 @@ public class PJSettingsWindow : EditorWindow {
         mList.Add(new SubItem() { name = "STAT_TD_ADS", displayName = "正式服带统计带广告", isDebug = false, isRelease = true });
         //单机模式
         mList.Add(new SubItem() { name = "SINGLE_MODE", displayName = "单机模式", isDebug = true, isRelease = false });
+        //禁用AB资源的加载方式
+        mList.Add(new SubItem() { name = "DISABLE_AB", displayName = "编辑器调试模式（禁用AB模式）", isDebug = true, isRelease = false });
 
 
         for (int i = 0; i < mList.Count; i++)
@@ -59,9 +61,11 @@ public class PJSettingsWindow : EditorWindow {
             mDic[mList[i].name] = GUILayout.Toggle(mDic[mList[i].name], mList[i].displayName);
             EditorGUILayout.EndHorizontal();
         }
-
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("save", GUILayout.Width(100)))
         {
+            SaveDefineSymbol();
+            /*
             mDefineSymbol = "";
             foreach (var item in mDic)
             {
@@ -72,8 +76,44 @@ public class PJSettingsWindow : EditorWindow {
             }
             //最终保存到宏定义中
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, mDefineSymbol);
-
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, mDefineSymbol);
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, mDefineSymbol);
+            */
         }
+        
+        EditorGUILayout.EndHorizontal();
+    }
+
+
+    private void SaveDefineSymbol()
+    {
+        mDefineSymbol = string.Empty;
+        foreach (var item in mDic)
+        {
+            if (item.Value)
+            {
+                mDefineSymbol += string.Format("{0};", item.Key);
+            }
+            //禁用AB加载时，把路径重设一下
+            if (item.Key.Equals("DISABLE_AB", System.StringComparison.CurrentCultureIgnoreCase))
+            {
+                //打包界面的场景列表
+                EditorBuildSettingsScene[] arrScene = EditorBuildSettings.scenes;
+                for (int i = 0; i < arrScene.Length; i++)
+                {
+                    //如果场景列表里有“Download”，则把他的值设置为Value（本地测试时勾选，正式打包时去掉）
+                    if (arrScene[i].path.IndexOf("Download", System.StringComparison.CurrentCultureIgnoreCase) > -1)
+                    {
+                        arrScene[i].enabled = item.Value;
+                    }
+                }
+                //重新给场景列表赋值
+                EditorBuildSettings.scenes = arrScene;
+            }
+        }
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, mDefineSymbol);
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, mDefineSymbol);
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, mDefineSymbol);
     }
 
 

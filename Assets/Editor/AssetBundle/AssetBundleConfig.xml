@@ -23,7 +23,7 @@
       <Path LocalPath="Download\Scene\InitScene\Scene_SelectRole.unity"></Path>
       <Path LocalPath="Download\Scene\InitScene\GameScene_HuPaoCun.unity"></Path>
     </Item>
-    <!--
+    
     <Item Name="OtherScene" Tag="Scene" IsFolder="false" IsFirstData="false">      
       <Path LocalPath="Download\Scene\CommonScene\GameScene_ChangAn.unity"></Path>
       <Path LocalPath="Download\Scene\CommonScene\GameScene_DiGong1.unity"></Path>
@@ -40,6 +40,6 @@
       <Path LocalPath="Download\Scene\CommonScene\GameScene_XueDi1.unity"></Path>
       <Path LocalPath="Download\Scene\CommonScene\GameScene_XueDi2.unity"></Path>
     </Item>
-    -->
+    
   </AssetBundle>
 </Root>

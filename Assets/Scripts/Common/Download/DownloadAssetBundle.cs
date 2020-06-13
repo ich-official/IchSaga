@@ -1,4 +1,4 @@
-//-----------------------------------------------------------
+ï»¿//-----------------------------------------------------------
 //	Author: Ich
 //  CreateTime: 2020-06-02 15:21:52
 //  Version: 1.0.0
@@ -13,19 +13,19 @@ using UnityEngine;
 using System; 
 
 /// <summary>
-/// ÏÂÔØ×ÊÔ´µÄÖ÷ÏÂÔØÆ÷
+/// ä¸‹è½½èµ„æºçš„ä¸»ä¸‹è½½å™¨
 /// </summary>
 public class DownloadAssetBundle : SingletonMono<DownloadAssetBundle> {
 
     private string mVersionUrl;
     private Action<List<DownloadDataEntity>> mOnInitVersion;
-    //ÏÂÔØÆ÷ÊıÁ¿
-    private DownloadABMultiThread[] mRoutine = new DownloadABMultiThread[DownloadManager.DownloadRoutineNum];   //¿ªÆô¼¸¸ö¶àÏß³ÌÏÂÔØ
+    //ä¸‹è½½å™¨æ•°é‡
+    private DownloadABMultiThread[] mRoutine = new DownloadABMultiThread[DownloadManager.DownloadRoutineNum];   //å¼€å¯å‡ ä¸ªå¤šçº¿ç¨‹ä¸‹è½½
 
-    private int mRoutineIndex = 0;  //ÏÂÔØÆ÷±àºÅË÷Òı
+    private int mRoutineIndex = 0;  //ä¸‹è½½å™¨ç¼–å·ç´¢å¼•
 
     /// <summary>
-    /// ±¾´Î×ÊÔ´°üµÄ×Ü´óĞ¡
+    /// æœ¬æ¬¡èµ„æºåŒ…çš„æ€»å¤§å°
     /// </summary>
     public int TotalSize
     {
@@ -34,26 +34,76 @@ public class DownloadAssetBundle : SingletonMono<DownloadAssetBundle> {
     }
 
     /// <summary>
-    /// ±¾´Î×ÊÔ´°üµÄ×ÜÊıÁ¿
+    /// æœ¬æ¬¡èµ„æºåŒ…çš„æ€»æ•°é‡
     /// </summary>
     public int TotalCount
     {
         get;
         private set;
     }
+
+    private bool isDownloadDone = false;
+
+    private float m_Time = 2; //é‡‡æ ·æ—¶é—´ï¼Œæ¯2ç§’è®¡ç®—ä¸€æ¬¡é€Ÿåº¦ã€ä¼°ç®—å‰©ä½™æ—¶é—´
+    private float m_AlreadyTime = 0; //å·²ç»ä¸‹è½½çš„æ—¶é—´
+
+    private float m_NeedTime = 0f;//å‰©ä½™çš„æ—¶é—´
+    private float m_Speed = 0f;//ä¸‹è½½é€Ÿåº¦
+
     protected override void OnStart()
     {
         base.OnStart();
-        //monoÀàµÄÔ­Òò£¬¿ÉÄÜ³õÊ¼»¯»¹Î´Íê³É¾Í¿ªÊ¼Ö´ĞĞ£¬±ÜÃâ´ËÎÊÌâ£¬Ê¹ÓÃĞ¯³Ì½øĞĞ¡£
+        //monoç±»çš„åŸå› ï¼Œå¯èƒ½åˆå§‹åŒ–è¿˜æœªå®Œæˆå°±å¼€å§‹æ‰§è¡Œï¼Œé¿å…æ­¤é—®é¢˜ï¼Œä½¿ç”¨æºç¨‹è¿›è¡Œã€‚
         StartCoroutine(DownloadVersion(mVersionUrl));
     }
 
     protected override void OnUpdate()
     {
+        
         base.OnUpdate();
+        if(TotalCount>0 && !isDownloadDone) //è¦ä¸‹è½½çš„æ•°é‡>0 å¹¶ä¸”è¿˜æ²¡ä¸‹è½½å®Œæˆ
+        {
+            int totalCompleteCount = CurrCompleteTotalCount();  //å½“å‰å·²ä¸‹è½½å®Œæˆçš„èµ„æºä¸ªæ•°
+            if (totalCompleteCount == 0)    totalCompleteCount = 1;
+
+            int totalCompleteSize = CurrCompleteTotalSize();    //å½“å‰å·²ä¸‹è½½å®Œæˆçš„èµ„æºå¤§å°ï¼ˆKBï¼‰
+
+            m_AlreadyTime += Time.deltaTime;
+            if (m_AlreadyTime > m_Time && m_Speed == 0)//è¿˜æœªé‡‡æ ·
+            {
+                m_Speed = totalCompleteSize / m_Time; //ä¼°ç®—çš„ä¸‹è½½é€Ÿåº¦
+            }
+            //è®¡ç®—å‰©ä½™æ—¶é—´ = (æ€»å¤§å° - å·²ç»ä¸‹è½½çš„å¤§å°) / é€Ÿåº¦
+            if (m_Speed > 0)
+            {
+                m_NeedTime = (TotalSize - totalCompleteSize) / m_Speed;
+            }
+            string str = string.Format("æ­£åœ¨ä¸‹è½½{0}/{1}", totalCompleteCount, TotalCount);
+            string progress= string.Format("ä¸‹è½½è¿›åº¦={0}", totalCompleteSize / (float)TotalSize); 
+            Debug.Log("è¿›åº¦" + str);
+            UIRootStartGameView.Instance.SetProgress(str, totalCompleteCount / (float)TotalCount);
+
+            if (m_NeedTime > 0)
+            {
+                string strNeedTime = string.Format("å‰©ä½™æ—¶é—´{0}ç§’", m_NeedTime);
+                Debug.Log("å‰©ä½™æ—¶é—´" + strNeedTime);
+            }
+
+
+            if (totalCompleteCount == TotalCount)
+            {
+                isDownloadDone = true;
+                UIRootStartGameView.Instance.SetProgress("èµ„æºæ›´æ–°å®Œæ¯•", 1);
+                if (DownloadManager.Instance.OnInitComplete != null)
+                {
+                    DownloadManager.Instance.OnInitComplete();
+                }
+                Debug.Log("ä¸‹è½½å®Œæˆ");
+            }
+        }
     }
     /// <summary>
-    /// ³õÊ¼»¯·şÎñÆ÷µÄ°æ±¾ĞÅÏ¢
+    /// åˆå§‹åŒ–æœåŠ¡å™¨çš„ç‰ˆæœ¬ä¿¡æ¯
     /// </summary>
     public void InitServerVersion(string url,Action<List<DownloadDataEntity>> OnInitVersion)
     {
@@ -61,7 +111,7 @@ public class DownloadAssetBundle : SingletonMono<DownloadAssetBundle> {
         mOnInitVersion = OnInitVersion;
     }
     /// <summary>
-    /// °Ñ·şÎñÆ÷ÉÏµÄ°æ±¾ĞÅÏ¢ÎÄ¼şÏÂÔØÏÂÀ´
+    /// æŠŠæœåŠ¡å™¨ä¸Šçš„ç‰ˆæœ¬ä¿¡æ¯æ–‡ä»¶ä¸‹è½½ä¸‹æ¥
     /// </summary>
     /// <param name="url"></param>
     /// <returns></returns>
@@ -70,25 +120,25 @@ public class DownloadAssetBundle : SingletonMono<DownloadAssetBundle> {
         yield return null;
         WWW www = new WWW(url);
         float timeOut = Time.time;
-        float progress = www.progress;  //ÏÂÔØ½ø¶È
+        float progress = www.progress;  //ä¸‹è½½è¿›åº¦
 
         while(www!=null && !www.isDone)
         {
-            //Èç¹û½ø¶È·¢Éú±ä»¯£¬¾Í°Ñ³¬Ê±Ê±¼äµã¶¨ÎªÄ¿Ç°Ê±¼ä
+            //å¦‚æœè¿›åº¦å‘ç”Ÿå˜åŒ–ï¼Œå°±æŠŠè¶…æ—¶æ—¶é—´ç‚¹å®šä¸ºç›®å‰æ—¶é—´
             if (progress < www.progress)
             {
                 timeOut = Time.time;
                 progress = www.progress;
             }
-            //ÅĞ¶Ï³¬Ê±
+            //åˆ¤æ–­è¶…æ—¶
             if ((Time.time - timeOut) >= DownloadManager.DownloadTimeOut)
             {
-                LogUtil.Log("ÏÂÔØ³¬Ê±");
+                LogUtil.Log("ä¸‹è½½è¶…æ—¶");
                 yield break;
             }
         }
         yield return www;
-        //È·±£wwwÃ»ÓĞÎÊÌâ
+        //ç¡®ä¿wwwæ²¡æœ‰é—®é¢˜
         string content = "";
         if (www!=null&& www.error == null)
         {
@@ -96,26 +146,27 @@ public class DownloadAssetBundle : SingletonMono<DownloadAssetBundle> {
             //Debug.Log("download ok!" + content);
             if (mOnInitVersion != null)
             {
-                //°ÑÎÄ¼şÏÂÔØÍê±ÏºóÁ¢¼´Ö´ĞĞÎ¯ÍĞ£¬Î¯ÍĞÄÚÈİÊÇ·â×°ºÃµÄ×ÊÔ´ÏêÇélist
+                //æŠŠæ–‡ä»¶ä¸‹è½½å®Œæ¯•åç«‹å³æ‰§è¡Œå§”æ‰˜ï¼Œå§”æ‰˜å†…å®¹æ˜¯å°è£…å¥½çš„èµ„æºè¯¦æƒ…list
                 mOnInitVersion(DownloadManager.Instance.PackDownloadData(content));
             }
         }
         else
         {
-            Debug.Log("ÏÂÔØÊ§°Ü£¡" + content);
+            Debug.Log("ä¸‹è½½é”™è¯¯ï¼š" + www.error);
+            Debug.Log("ä¸‹è½½å¤±è´¥ï¼" + content);
         }
     }
 
     /// <summary>
-    /// ÏÂÔØÊµ¼Ê×ÊÔ´
+    /// ä¸‹è½½å®é™…èµ„æº
     /// </summary>
     /// <param name="mNeedDownloadDataList"></param>
-    internal void DownloadFiles(List<DownloadDataEntity> downloadList)
+    public void DownloadFiles(List<DownloadDataEntity> downloadList)
     {
         TotalSize = 0;
         TotalCount = 0;
 
-        //³õÊ¼»¯ÏÂÔØÆ÷
+        //åˆå§‹åŒ–ä¸‹è½½å™¨
         for (int i = 0; i < mRoutine.Length; i++)
         {
             if (mRoutine[i] == null)
@@ -124,12 +175,12 @@ public class DownloadAssetBundle : SingletonMono<DownloadAssetBundle> {
             }
         }
 
-        //Ñ­»·µÄ¸øÏÂÔØÆ÷·ÖÅäÏÂÔØÈÎÎñ
+        //å¾ªç¯çš„ç»™ä¸‹è½½å™¨åˆ†é…ä¸‹è½½ä»»åŠ¡
         for (int i = 0; i < downloadList.Count; i++)
         {
             mRoutineIndex = mRoutineIndex % mRoutine.Length; //0-4
 
-            //ÆäÖĞµÄÒ»¸öÏÂÔØÆ÷ ¸øËû·ÖÅäÒ»¸öÎÄ¼ş
+            //å…¶ä¸­çš„ä¸€ä¸ªä¸‹è½½å™¨ ç»™ä»–åˆ†é…ä¸€ä¸ªæ–‡ä»¶
             mRoutine[mRoutineIndex].AddDownload(downloadList[i]);
 
             mRoutineIndex++;
@@ -137,11 +188,47 @@ public class DownloadAssetBundle : SingletonMono<DownloadAssetBundle> {
             TotalCount++;
         }
 
-        //ÈÃÏÂÔØÆ÷¿ªÊ¼ÏÂÔØ
+        //è®©ä¸‹è½½å™¨å¼€å§‹ä¸‹è½½
         for (int i = 0; i < mRoutine.Length; i++)
         {
             if (mRoutine[i] == null) continue;
             mRoutine[i].StartDownload();
         }
+    }
+
+
+    /// <summary>
+    /// å½“å‰å·²ç»ä¸‹è½½çš„æ–‡ä»¶æ€»å¤§å°
+    /// </summary>
+    /// <returns></returns>
+    public int CurrCompleteTotalSize()
+    {
+        int completeTotalSize = 0;
+
+        for (int i = 0; i < mRoutine.Length; i++)
+        {
+            if (mRoutine[i] == null) continue;
+            completeTotalSize += mRoutine[i].DownloadSize;
+        }
+
+        return completeTotalSize;
+    }
+
+
+    /// <summary>
+    /// å½“å‰å·²ç»ä¸‹è½½çš„æ–‡ä»¶æ€»æ•°é‡
+    /// </summary>
+    /// <returns></returns>
+    public int CurrCompleteTotalCount()
+    {
+        int completeTotalCount = 0;
+
+        for (int i = 0; i < mRoutine.Length; i++)
+        {
+            if (mRoutine[i] == null) continue;
+            completeTotalCount += mRoutine[i].CompleteCount;
+        }
+
+        return completeTotalCount;
     }
 }
