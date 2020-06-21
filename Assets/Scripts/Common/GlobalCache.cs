@@ -21,6 +21,9 @@ public class GlobalCache : SingletonBase<GlobalCache>
     public string Account_LastLoginServerName;  //用户上次登陆服务器的名称
     #endregion
 
-
+    #region 选择区服
+    public string GameServer_CurrentIp;   //当前选择的区服IP
+    public int GameServer_CurrentPort;   //当前选择的区服端口号
+    #endregion
 
 }

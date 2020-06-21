@@ -35,11 +35,11 @@ public class HttpSimulator : SimulatorBase<HttpSimulator>
         switch (api)
         {
             case ServerAPI.Account://µÇÂ½¡¢×¢²á
-                CallbackArgs argsAccount = AccountControllerServer.Instance.Post(json);
+                CallbackArgs argsAccount = AccountCtrlrS.Instance.Post(json);
                 RequestSingle(argsAccount);
                 break;
             case ServerAPI.GameServer:
-                CallbackArgs argsGameServer = GameServerControllerServer.Instance.Post(json);
+                CallbackArgs argsGameServer = GameServerCtrlrS.Instance.Post(json);
                 RequestSingle(argsGameServer);
                 break;
             case ServerAPI.Recharge:
@@ -47,7 +47,7 @@ public class HttpSimulator : SimulatorBase<HttpSimulator>
             case ServerAPI.AppleRecharge:
                 break;
             case ServerAPI.Time://ÇëÇóÊ±¼ä´Á¡¢
-                CallbackArgs argsTime = AccountControllerServer.Instance.Post(json);
+                CallbackArgs argsTime = AccountCtrlrS.Instance.Post(json);
                 break;
         }
     }

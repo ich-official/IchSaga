@@ -14,9 +14,9 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// 
+/// http方式，服务器端账户controller
 /// </summary>
-public class AccountControllerServer : SingletonBase<AccountControllerServer>
+public class AccountCtrlrS : SingletonBase<AccountCtrlrS>
 {
     public CallbackArgs Post(string jsonStr)
     {

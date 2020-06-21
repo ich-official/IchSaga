@@ -91,13 +91,14 @@ public class AccountDBModelServer : DBModelServerBase  {
             {
                 //注册成功，把这条注册的用户信息返回去
                 result = XMLHelper.Instance.Query("Account.xml", "Account", null, dic);
-
+                int temp = -1;
                 AccountEntity entity = new AccountEntity();
                 entity.Id = int.Parse(result[0]["Id"]);
                 entity.UserName = targets["Username"];
-                entity.Gem = int.Parse(result[0]["Gem"]);
-                entity.LastLoginServerId = int.Parse(result[0]["LastLoginServerId"]);
+                entity.Gem = (int.Parse(result[0]["Gem"])==-1)?0:temp;
+                entity.LastLoginServerId = (int.Parse(result[0]["LastLoginServerId"])==-1)?1:temp;
                 entity.LastLoginServerName = result[0]["LastLoginServerName"];
+                //entity.LastLoginServerName = "双线1服";    //注册后立即查询没有有效信息，暂时写死
                 entity.LastLoginServerIp = "127.0.0.1"; //单机版用不到，暂时写死
                 entity.LastLoginServerPort = 1000 + entity.LastLoginServerId - 1; //简易写，Id从1开始，但Port从1000开始
                 args = GenerateSuccessMsg(entity);
@@ -111,7 +112,7 @@ public class AccountDBModelServer : DBModelServerBase  {
     //2.验证密码是否和用户名匹配
     public CallbackArgs Login(Dictionary<string,string> conditions)
     {
-        //TODO:把这里改写成XMLHelper格式即可，只改持久层，其他逻辑层代码不用动
+        //把这里改写成XMLHelper格式即可，只改持久层，其他逻辑层代码不用动
         CallbackArgs args = new CallbackArgs();
         List<Dictionary<string, string>> result=XMLHelper.Instance.Query("Account.xml", "Account", null, conditions);
         if (result == null)

@@ -12,44 +12,33 @@ using System.Collections;
 using System.Text;
 
 /// <summary>
-/// 服务器模拟器，模拟服务器返回的数据，单机模式下使用
+/// 服务器模拟器，模拟socket方式服务器处理数据的逻辑，单机模式下使用
+/// 该类的功能有：客户端给服务器发送数据包，服务器给客户端返回数据包
 /// </summary>
-public class SocketSimulator : SimulatorBase<SocketSimulator>
+public class SocketManagerServer : SimulatorBase<SocketManagerServer>
 {
     #region socket连接+服务器操作包完全模拟，最后返回的数据包走客户端正式处理流程
     MemoryStreamUtil mReceiveStream = new MemoryStreamUtil();
-
+    /*
     public void Connect()
     {
         Debug.Log("connect success:127.0.0.1");
     }
+    */
     #region SendMessageToServer客户端模拟socket通信向服务器发送数据
     
-    public void SendMessageToServer(byte[] dataPkg,bool isDIYReturnMsg=false,byte[] returnDIYPkg=null)
-    {
-        Debug.Log("client:已向服务器发送数据包！");
-        if (isDIYReturnMsg == true)
-        {
-            ServerOperator(dataPkg,true);
-            SendMessageToClient(returnDIYPkg);      //模拟服务器向客户端发送指定消息
-        }
-        else {
 
-            ServerOperator(dataPkg);    //服务器返回的消息模拟真实的数据派发方式进行，在ServerSimulatorRuntime中
-            
-
-        }
-
-    }
     #endregion 
 
     #region SendMessageToClient 服务器模拟socket通信向客户端返回数据的方法
     /// <summary>
-    /// 模拟服务器向客户端发送数据
+    /// 服务器返回数据给客户端
     /// </summary>
+    /// <param name="returnPkg">服务器返回的原始数据，需要经过makePkg后才能返回给客户端</param>
     public void SendMessageToClient(byte[] returnPkg)
     {
-        SocketManager.Instance.ReceiveCallbackSingle(returnPkg);
+        byte[] receive = SocketManager.Instance.MakeDataPkg(returnPkg);
+        SocketManager.Instance.ReceiveCallbackSingle(receive);
     }
     #endregion 
     
@@ -62,7 +51,7 @@ public class SocketSimulator : SimulatorBase<SocketSimulator>
     /// <param name="dataPkg">本地向服务器传什么数据</param>
     /// <param name="isDIYReturnMsg">是否由客户端决定服务器返回什么数据，默认为false，就是由服务端通过逻辑处理后返回一个伪真实的数据，如果为true，就是一个由客户端决定的纯伪造的数据</param>
     /// <param name="returnPkg">希望服务器向本地传什么数据</param>
-    private void ServerOperator(byte[] dataPkg,bool isDIYReturnPkg=false)
+    public void ServerOperator(byte[] dataPkg,bool isDIYReturnPkg=false)
     {
         if (isDIYReturnPkg == true) {//向客户端返回的是客户端指定的数据包，不必再做下列处理
             return; 
@@ -109,6 +98,7 @@ public class SocketSimulator : SimulatorBase<SocketSimulator>
                 protoCode = stream.ReadUShort();
                 stream.Read(protoContent, 0, protoContent.Length);
                 SocketDispatcher.Instance.Dispatch(protoCode, protoContent);
+                EventDispatcherS.Instance.Dispatch(protoCode, null, protoContent);
             }
             //41课以后使用网络协议，增加此部分判断逻辑
             //43课以后使用观察者模式
@@ -133,7 +123,7 @@ public class SocketSimulator : SimulatorBase<SocketSimulator>
         }
         else
         {
-            Debug.Log("消息发送失败！");
+            Debug.Log("服务器解析数据包错误！");
         }
     }
     #endregion 

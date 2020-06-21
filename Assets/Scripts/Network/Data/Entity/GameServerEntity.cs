@@ -11,7 +11,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// 
+/// 大区详情实体
 /// </summary>
 public class GameServerEntity : ClientEntityBase
 {

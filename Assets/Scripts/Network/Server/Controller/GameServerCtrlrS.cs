@@ -14,9 +14,9 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// 处理区服相关控制机（模拟器）
+/// 处理区服相关控制机（模拟器/服务器端）
 /// </summary>
-public class GameServerControllerServer : SingletonBase<GameServerControllerServer>
+public class GameServerCtrlrS : SingletonBase<GameServerCtrlrS>
 {
     public CallbackArgs Post(string jsonStr)
     {

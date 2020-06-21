@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.ComponentModel;
 
 //枚举类型汇总
 #region  ENUM加载窗口的类型
@@ -61,6 +62,7 @@ public enum SceneName
 {
     LOGIN5X,
     MAINSCENE5X,
+    SELECT_ROLE,
 }
 #endregion
 
@@ -118,5 +120,21 @@ public enum DialogType
 {
     OK,
     OKAndCancel
+}
+#endregion
+
+#region ENUM 仿mmcoyframework EnumEntityStatus通用数据状态枚举
+public enum EnumEntityStatus : byte
+{
+    /// <summary>
+    /// 已删除
+    /// </summary>
+    [Description("已删除")]
+    Deleted = 0,
+    /// <summary>
+    /// 有效
+    /// </summary>
+    [Description("有效")]
+    Released = 1
 }
 #endregion

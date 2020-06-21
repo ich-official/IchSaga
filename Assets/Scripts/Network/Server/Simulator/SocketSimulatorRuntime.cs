@@ -11,6 +11,7 @@ using UnityEngine;
 using System.Collections;
 /// <summary>
 /// 单机模式下专用，用于模拟服务器端派发协议的业务逻辑操作
+/// 
 /// </summary>
 public class SocketSimulatorRuntime : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class SocketSimulatorRuntime : MonoBehaviour
         test2.name = "server msg";
         test2.price = 999f;
         byte[] returnPkg=SocketManager.Instance.MakeDataPkg(test2.ToArray());
-        SocketSimulator.Instance.SendMessageToClient(returnPkg);
+        SocketManagerServer.Instance.SendMessageToClient(returnPkg);
     }
     #endregion
     void Start () {

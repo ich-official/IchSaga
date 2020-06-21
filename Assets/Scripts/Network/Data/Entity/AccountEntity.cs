@@ -12,7 +12,7 @@ using System.Collections;
 using System;
 
 /// <summary>
-/// 账户实体
+/// 账户实体，客户端/服务器通用实体
 /// </summary>
 public class AccountEntity : ClientEntityBase {
     #region 实体属性

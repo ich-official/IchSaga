@@ -43,4 +43,29 @@ public class EditorUtils  {
         Debug.Log("拷贝完毕");
     }
 
+    [MenuItem("IchTools/Add Proto Scripts")]
+    public static void AddProto()
+    {
+        Debug.Log("proto orz");
+        AddProtoWindow window = (AddProtoWindow)EditorWindow.GetWindow(typeof(AddProtoWindow));
+        window.titleContent = new GUIContent("协议自动生成器");
+        window.Show();
+
+    }
+
+
+
+    #region 帮助类
+    [MenuItem("Help/Components Collections")]
+    public static void ComponentsCollections()
+    {
+        ComponentsCollections window = (ComponentsCollections)EditorWindow.GetWindow(typeof(ComponentsCollections));
+        window.minSize = new Vector2(400, 450);
+        window.maxSize = new Vector2(800, 900);
+        window.titleContent = new GUIContent("展示编辑器控件");
+        window.Show();
+    }
+    #endregion
+
+
 }

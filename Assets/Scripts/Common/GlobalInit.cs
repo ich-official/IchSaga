@@ -83,8 +83,4 @@ public class GlobalInit : MonoBehaviour {
         }
 	}
 
-    void OnDestroy()
-    {
-        SqliteHelper.Instance.Disconnect();
-    }
 }
