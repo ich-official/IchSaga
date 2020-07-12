@@ -13,14 +13,14 @@ using System.Collections;
 using System.IO;
 
 /// <summary>
-/// 本地文件管理，把一个文件转换成字节数组
+/// 本地文件管理，把一个文件转换成字节数组，目前用于处理本地excel数据表
 /// </summary>
 public class LocalFileManager : SingletonBase<LocalFileManager>
 {
 #if UNITY_EDITOR   //编辑器调试时的路径
     public readonly string localFilePath = Application.dataPath + "/../" + "AssetBundles/";
 #elif UNITY_ANDROID ||UNITY_STANDALONE_WIN  || UNITY_IPHONE
-    public readonly string localFilePath = Application.persistentDataPath + "/AssetBundles/";
+    public readonly string localFilePath = Application.persistentDataPath + "/";
 #endif
 
 

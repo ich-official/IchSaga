@@ -12,9 +12,9 @@ using System.Collections;
 using System;
 
 /// <summary>
-/// 通用对话框控制器，=MessageCtrl
+/// 通用UI对话框控制器，=MessageCtrl
 /// </summary>
-public class DialogController : ControllerBase<DialogController>
+public class UIDialogController : ControllerBase<UIDialogController>
 {
     private GameObject mDialogObj;
     /// <summary>
@@ -23,7 +23,7 @@ public class DialogController : ControllerBase<DialogController>
     /// <param name="msg"></param>
     /// <param name="okAction"></param>
     /// <param name="cancelAction"></param>
-    public void Show(string msg, DialogType type = DialogType.OK, Action okAction=null, Action cancelAction=null)
+    public void Show(string msg, UIDialogType type = UIDialogType.OK, Action okAction=null, Action cancelAction=null)
     {
         if(mDialogObj==null) mDialogObj = ResourcesManager.Instance.Load(ResourcesManager.ResourceType.UIPanel, "Panel_Dialog", isCache: true);
         mDialogObj.transform.parent = UIRootController.Instance.currentScene.containerCenter;

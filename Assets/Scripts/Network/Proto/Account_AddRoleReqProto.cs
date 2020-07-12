@@ -1,8 +1,11 @@
-//===================================================
-//作    者：边涯  http://www.u3dol.com  QQ群：87481002
-//创建时间：2018-02-25 22:40:37
-//备    注：
-//===================================================
+//-----------------------------------------------------------
+//	Author: Ich
+//  CreateTime: 2020-07-01 14:51:05
+//  Version: 1.0.0
+//  ProjectURL: https://github.com/ich-official/IchSaga
+//  Contact_Me: ich_official@163.com
+//	
+//-----------------------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -14,16 +17,18 @@ public struct Account_AddRoleReqProto : IProto
 {
     public ushort ProtoCode { get { return 10003; } }
 
-    public byte JobId; //职业ID
+    public byte ClassId; //职业ID
     public string RoleNickName; //角色名称
+    public int GameServerId;    //角色所在区服ID
 
     public byte[] ToArray()
     {
         using (MemoryStreamUtil ms = new MemoryStreamUtil())
         {
             ms.WriteUShort(ProtoCode);
-            ms.WriteByte(JobId);
+            ms.WriteByte(ClassId);
             ms.WriteUTF8String(RoleNickName);
+            ms.WriteInt(GameServerId);
             return ms.ToArray();
         }
     }
@@ -33,8 +38,9 @@ public struct Account_AddRoleReqProto : IProto
         Account_AddRoleReqProto proto = new Account_AddRoleReqProto();
         using (MemoryStreamUtil ms = new MemoryStreamUtil(buffer))
         {
-            proto.JobId = (byte)ms.ReadByte();
+            proto.ClassId = (byte)ms.ReadByte();
             proto.RoleNickName = ms.ReadUTF8String();
+            proto.GameServerId = ms.ReadInt();
         }
         return proto;
     }

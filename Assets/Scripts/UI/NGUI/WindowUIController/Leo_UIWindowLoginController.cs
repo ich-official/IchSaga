@@ -58,7 +58,7 @@ public class Leo_UIWindowLoginController : Leo_UIWindowBase {
             return;
         }
         GlobalInit.Instance.currentPlayerUsername = username;
-        SceneManager.Instance.LoadMainScene();
+        ScenesManager.Instance.LoadMainScene();
     }
 
 }

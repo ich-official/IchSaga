@@ -116,7 +116,7 @@ public enum RoleAniChangeCondition
 #endregion
 
 #region ENUM 对话框UI的类型，单按钮还是多按钮
-public enum DialogType
+public enum UIDialogType
 {
     OK,
     OKAndCancel

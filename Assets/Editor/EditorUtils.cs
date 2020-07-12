@@ -31,17 +31,33 @@ public class EditorUtils  {
     {
         //把初始资源复制到StreamingAssets文件夹内
         string toPath = Application.streamingAssetsPath + "/AssetBundles/";
-
+        string toDBPath = Application.streamingAssetsPath + "/ServerDB/";
         if (Directory.Exists(toPath))
         {
             Directory.Delete(toPath, true);
         }
         Directory.CreateDirectory(toPath);
+        if (Directory.Exists(toDBPath))
+        {
+            Directory.Delete(toDBPath, true);
+        }
+        Directory.CreateDirectory(toDBPath);
+        //IOUtil.CopyDirectory(Application.persistentDataPath, toPath);
+        IOUtil.CopyDirectory(Application.dataPath + "/../AssetBundles/Android/",toPath);//拷贝AB资源
+        IOUtil.CopyDirectory(Application.dataPath + "/DB", toDBPath);//拷贝DB资源
 
-        IOUtil.CopyDirectory(Application.persistentDataPath, toPath);
         AssetDatabase.Refresh();
         Debug.Log("拷贝完毕");
     }
+
+    [MenuItem("IchTools/Clear PlayerPrefs")]
+    public static void ClearPlayerPrefs()
+    {
+        Debug.Log("delete OK");
+        PlayerPrefs.DeleteAll();
+
+    }
+
 
     [MenuItem("IchTools/Add Proto Scripts")]
     public static void AddProto()

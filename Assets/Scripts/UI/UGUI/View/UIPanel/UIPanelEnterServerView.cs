@@ -30,7 +30,7 @@ public class UIPanelEnterServerView : UIPanelViewBase
             case "ChangeServerButton"://点击换区
                 UIDisPatcher.Instance.Dispatch(Constant.UIPanelEnterServerView_ChangeServerButton);
                 break;
-            case "EnterGameButton"://进入大区，开始游戏
+            case "EnterGameButton"://进入选择角色界面
                 UIDisPatcher.Instance.Dispatch(Constant.UIPanelEnterServerView_EnterGameButton);
                 break;
         }

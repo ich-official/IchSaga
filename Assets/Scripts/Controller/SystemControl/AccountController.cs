@@ -122,7 +122,7 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
         if (args.hasError)
         {
 
-            ShowDialog(args.errorCode + ":" + args.errorMsg, DialogType.OK, okAction: () =>
+            ShowDialog(args.errorCode + ":" + args.errorMsg, UIDialogType.OK, okAction: () =>
             {
             //这是一个匿名委托，类似java匿名内部类、匿名方法一样
                 Debug.Log("OK按钮回调，模拟器报错：" + args.errorCode + args.errorMsg);
@@ -130,14 +130,21 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
         }
         else
         {
-            Debug.Log("模拟器返回消息：" + args.json);
+            Debug.Log("login Callback模拟器返回消息：" + args.json);
             AccountEntity entity = args.obj as AccountEntity;
-            if (entity.LastLoginServerName != "")
+            if (entity.LastLoginServerName != "-1")
             {
                 //记录最后登陆信息
                 GlobalCache.Instance.Account_CurrentId = entity.Id;
                 GlobalCache.Instance.Account_LastLoginServerId = entity.LastLoginServerId;
                 GlobalCache.Instance.Account_LastLoginServerName = entity.LastLoginServerName;
+            }
+            else
+            {
+                //等于-1，表示这条数据没有LastLoginServerName，附上默认值
+                GlobalCache.Instance.Account_CurrentId = entity.Id;
+                GlobalCache.Instance.Account_LastLoginServerId = 1;
+                GlobalCache.Instance.Account_LastLoginServerName = "双线1服";
             }
             if (mIsQuickLogin)
             {
@@ -196,7 +203,7 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
         if (args.hasError)
         {
             Debug.Log("模拟器报错：" + args.errorCode+args.errorMsg);
-            DialogController.Instance.Show(args.errorCode + ":" + args.errorMsg);
+            UIDialogController.Instance.Show(args.errorCode + ":" + args.errorMsg);
         }
         else
         {
@@ -207,14 +214,14 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
             PlayerPrefs.SetString(Constant.QuickLoginUsername, mRegView.Username.text);
             PlayerPrefs.SetString(Constant.QuickLoginPwd, mRegView.Pwd.text);
             StatUtil.Reg(entity.Id, mRegView.Username.text);//统计系统上报登录行为
-            if (entity.LastLoginServerName != "")
-            {
-                //记录最后登陆信息
-                GlobalCache.Instance.Account_CurrentId = entity.Id;
-                GlobalCache.Instance.Account_LastLoginServerId = entity.LastLoginServerId;
-                GlobalCache.Instance.Account_LastLoginServerName = entity.LastLoginServerName;
-            }
-            mRegView.SelfCloseAndOpenNext(UIWindowType.EnterServer);
+            //放进缓存待用
+            GlobalCache.Instance.Account_CurrentId = entity.Id;
+            GlobalCache.Instance.Account_LastLoginServerId = entity.LastLoginServerId;
+            GlobalCache.Instance.Account_LastLoginServerName = entity.LastLoginServerName;
+
+            //mRegView.SelfCloseAndOpenNext(UIWindowType.EnterServer);
+            mRegView.SelfClose();
+            GameServerController.Instance.OpenView(UIWindowType.EnterServer);
         }
     }
 

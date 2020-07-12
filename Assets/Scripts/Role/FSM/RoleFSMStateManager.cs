@@ -18,7 +18,7 @@ public class RoleFSMStateManager  {
 
 
     
-    public PlayerController currentplayerController
+    public RoleController currentplayerController
     {
         get;
         private set;    //private set表示只能在本类才能赋值， 不能通过调用赋值
@@ -36,7 +36,7 @@ public class RoleFSMStateManager  {
     /// 构造函数，实例化manager对象时，同时实例化字典，添加所有状态
     /// </summary>
     /// <param name="playercontroller"></param>
-    public RoleFSMStateManager(PlayerController playercontroller)
+    public RoleFSMStateManager(RoleController playercontroller)
     {
         currentplayerController = playercontroller;
         roleStateDic = new Dictionary<RoleState, RoleStateBase>();

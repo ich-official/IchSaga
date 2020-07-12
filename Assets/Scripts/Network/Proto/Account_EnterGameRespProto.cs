@@ -1,8 +1,11 @@
-//===================================================
-//作    者：边涯  http://www.u3dol.com  QQ群：87481002
-//创建时间：2018-02-25 22:40:38
-//备    注：
-//===================================================
+//-----------------------------------------------------------
+//	Author: Ich
+//  CreateTime: 2020-07-01 14:51:05
+//  Version: 1.0.0
+//  ProjectURL: https://github.com/ich-official/IchSaga
+//  Contact_Me: ich_official@163.com
+//	
+//-----------------------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using System;

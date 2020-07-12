@@ -1,8 +1,11 @@
-//===================================================
-//作    者：边涯  http://www.u3dol.com  QQ群：87481002
-//创建时间：2018-02-25 22:40:37
-//备    注：
-//===================================================
+//-----------------------------------------------------------
+//	Author: Ich
+//  CreateTime: 2020-07-01 14:51:05
+//  Version: 1.0.0
+//  ProjectURL: https://github.com/ich-official/IchSaga
+//  Contact_Me: ich_official@163.com
+//	Update:手动修改过一次，添加了区服判断
+//-----------------------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -15,6 +18,7 @@ public struct Account_LoginGameServerReqProto : IProto
     public ushort ProtoCode { get { return 10001; } }
 
     public int AccountId; //账户ID
+    public int GameServerId;    //区服ID
 
     public byte[] ToArray()
     {
@@ -22,6 +26,7 @@ public struct Account_LoginGameServerReqProto : IProto
         {
             ms.WriteUShort(ProtoCode);
             ms.WriteInt(AccountId);
+            ms.WriteInt(GameServerId);
             return ms.ToArray();
         }
     }
@@ -32,6 +37,7 @@ public struct Account_LoginGameServerReqProto : IProto
         using (MemoryStreamUtil ms = new MemoryStreamUtil(buffer))
         {
             proto.AccountId = ms.ReadInt();
+            proto.GameServerId = ms.ReadInt();
         }
         return proto;
     }

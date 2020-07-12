@@ -26,7 +26,7 @@ public abstract class AbstractDBModel<T,P> where T:new() where P:AbstractEntity 
     {
         get;
     }
-    protected abstract P CreateEntity(GameDataTableParser parser);  //创建一个子类实体的对象
+    protected abstract P MakeEntity(GameDataTableParser parser);  //创建一个子类实体的对象
 
     #endregion
     /// <summary>
@@ -71,14 +71,21 @@ public abstract class AbstractDBModel<T,P> where T:new() where P:AbstractEntity 
     /// </summary>
     private void LoadData()
     {
-        //LeoError，这里的路径在以后热更新时做修改，现在是临时路径
-        GameDataTableParser parser = new GameDataTableParser(@"H:\UnityProjectSVN\SnowWorldBattle_Beta\TempExcel\"+FileName);
+        //参考streamingAsset路径：file:///data/app/com.ichgame.ichsaga-1/base.apk!/assets/AssetBundles/download\DataTable\Chapter.data
+        //参考persist路径：/storage/emulated/0/Android/data/com.ichgame.ichsaga/files/download\DataTable\Chapter.data
+        GameDataTableParser parser;
+#if SINGLE_MODE && UNITY_EDITOR
+        //TODO，这里的路径在以后热更新时做修改，现在是临时路径暂时写死
+        parser = new GameDataTableParser(@"H:\IchSagaGit\IchSaga\Assets\StreamingAssets\AssetBundles\download\DataTable\" + FileName);
+#elif SINGLE_MODE && UNITY_ANDROID
+        parser = new GameDataTableParser(Application.persistentDataPath + @"/download\DataTable\" + FileName);
+#endif
         while (!parser.Eof)
         {
             //由子类创建实体，返回来，即可知道P是哪个子类的对象
-            P p = CreateEntity(parser);
+            P p = MakeEntity(parser);
             mList.Add(p);
-            mDic[p.ID] = p;
+            mDic[p.Id] = p;
             parser.Next();
         }
     }

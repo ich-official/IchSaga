@@ -4,6 +4,10 @@ This is an independent game, developed by Ich(myself), using Unity3D.
 If you have some great ideas about this game, send e-mail to ich_official@163.com and tell me. I'm glad to hear your advice lol.
 
 ## Update log
+### 2020.07.12
+  Complete logic of channel,server and account, complete role module and functions.
+### 2020.06.21
+  Change folder structure Scripts/Server->Scripts/Network/Server
 ### 2020.06.13
   1.Update packing AssetBundle utils，now support copy AssetBundles file to StreamingAsset directly.
   2.replace local DB file system（sqlite->xml）
@@ -23,6 +27,10 @@ If you have some great ideas about this game, send e-mail to ich_official@163.co
 如果你想出了很棒的游戏玩法，欢迎发邮件告诉我：ich_official@163.com，我随时恭候233.
 
 ## 更新日志
+### 2020.07.12
+  完善了渠道、区服、账号之间的逻辑，新增角色模块功能
+### 2020.06.21
+  更新了目录结构，把Server、Proto文件夹归并到Network文件夹下。
 ### 2020.06.13
   1.更新了打包AB资源的方法，支持直接拷贝资源到StreamingAsset文件夹下的功能
   2.替换了本地数据库读取方式（sqlite->xml）

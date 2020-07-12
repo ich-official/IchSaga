@@ -316,7 +316,7 @@ public class AssetBundleWindow : EditorWindow {
             string fileName = newPath.Replace("Assets/", "").Replace(file.Extension, "");
 
             //后缀
-            string variant = file.Extension.Equals(".unity", StringComparison.CurrentCultureIgnoreCase) ? "unity" : "assetbundle";
+            string variant = file.Extension.Equals(".unity", StringComparison.CurrentCultureIgnoreCase) ? "unity3d" : "assetbundle";
 
             AssetImporter import = AssetImporter.GetAtPath(newPath);    //获取指定路径（相对路径）下的资源的导入器
             import.SetAssetBundleNameAndVariant(fileName, variant);     //设置AB资源的文件名和扩展名

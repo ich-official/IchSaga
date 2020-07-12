@@ -32,10 +32,10 @@ public class GlobalInit : MonoBehaviour {
     /// <summary>
     /// UITween曲线，NGUI也可以用
     /// </summary>
-    public AnimationCurve LeoAnimationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
+    public AnimationCurve CommonAnimationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
 
     [HideInInspector]
-    public PlayerController currentPlayer;
+    public RoleController currentPlayer;
 
     [HideInInspector]
     public string currentPlayerUsername;

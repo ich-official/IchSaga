@@ -30,9 +30,9 @@ public class SerializedLightmapSetting : MonoBehaviour
                 {
                     lightmaps[i] = new LightmapData();
                     if (i < l1)
-                        lightmaps[i].lightmapFar = lightmapFar[i];
+                        lightmaps[i].lightmapColor = lightmapFar[i];
                     if (i < l2)
-                        lightmaps[i].lightmapNear = lightmapNear[i];
+                        lightmaps[i].lightmapDir = lightmapNear[i];
                 }
             }
             LightmapSettings.lightmaps = lightmaps;
@@ -40,7 +40,7 @@ public class SerializedLightmapSetting : MonoBehaviour
         }
     }
 
-    #region Leo×Ô¼ºÓÅ»¯µÄ·½·¨£¬OnDestroyÊ±Í¬Ê±ÊÍ·Å2¸öÊý×éµÄÒýÓÃ
+    #region Leoï¿½Ô¼ï¿½ï¿½Å»ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½OnDestroyÊ±Í¬Ê±ï¿½Í·ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void OnDestroy()
     {
         if (lightmapFar != null && lightmapFar.Length>0)
@@ -73,8 +73,8 @@ public class SerializedLightmapSetting : MonoBehaviour
             lightmapNear = new Texture2D[l];
             for (int i = 0; i < l; i++)
             {
-                lightmapFar[i] = LightmapSettings.lightmaps[i].lightmapFar;
-                lightmapNear[i] = LightmapSettings.lightmaps[i].lightmapNear;
+                lightmapFar[i] = LightmapSettings.lightmaps[i].lightmapColor;
+                lightmapNear[i] = LightmapSettings.lightmaps[i].lightmapDir;
             }
         }
         MeshLightmapSetting[] savers = FindObjectsOfType<MeshLightmapSetting>();

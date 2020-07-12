@@ -15,7 +15,7 @@ using System.Collections;
 /// </summary>
 public class RoleAI : MonoBehaviour,IRoleAI {
 
-    public PlayerController CurrentRole
+    public RoleController CurrentRole
     {
         get;
         set;

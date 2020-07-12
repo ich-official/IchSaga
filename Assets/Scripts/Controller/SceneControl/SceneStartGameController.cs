@@ -31,7 +31,7 @@ public class SceneStartGameController : MonoBehaviour {
     private IEnumerator LoadLoginScene()
     {
         yield return new WaitForSeconds(1.2f);
-        SceneManager.Instance.LoadLoginScene();
+        ScenesManager.Instance.LoadLoginScene();
     }
 
     /// <summary>

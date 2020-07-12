@@ -19,6 +19,7 @@ public class UIRootController : SingletonBase<UIRootController>{
     {
         LOGIN,
         LOADING,
+        SELECT_ROLE,
         MAIN
     }
 
@@ -37,6 +38,12 @@ public class UIRootController : SingletonBase<UIRootController>{
             case UIRootType.MAIN:
                 obj = ResourcesManager.Instance.
                     Load(ResourcesManager.ResourceType.UIRoot, "UIRoot_MainUGUI");
+                currentScene = obj.GetComponent<UIRootViewBase>();
+                break;
+            case UIRootType.SELECT_ROLE:
+                obj = ResourcesManager.Instance.
+                    Load(ResourcesManager.ResourceType.UIRoot, "UIRoot_SelectRoleUGUI");
+                currentScene = obj.GetComponent<UIRootViewBase>();
                 break;
         }
 

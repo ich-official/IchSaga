@@ -50,8 +50,8 @@ public class ControllerBase<T> : IDisposable where T : new()
     /// <param name="msg"></param>
     /// <param name="okAction"></param>
     /// <param name="cancelAction"></param>
-    protected void ShowDialog(string msg,DialogType type=DialogType.OK, Action okAction=null,Action cancelAction=null){
-        DialogController.Instance.Show(msg,type,okAction, cancelAction);
+    protected void ShowDialog(string msg,UIDialogType type=UIDialogType.OK, Action okAction=null,Action cancelAction=null){
+        UIDialogController.Instance.Show(msg,type,okAction, cancelAction);
     }
     /// <summary>
     /// 添加事件监听，可用于观察者模式派发委托时使用

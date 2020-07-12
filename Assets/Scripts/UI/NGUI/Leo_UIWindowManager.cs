@@ -313,7 +313,7 @@ public class Leo_UIWindowManager : SingletonBase<Leo_UIWindowManager>
         }
         Tweener ts = obj.transform.DOLocalMove(Vector3.zero, obj.GetComponent<UIPanelViewBase>().tweenDuration)
             .SetAutoKill(false)
-            .SetEase(GlobalInit.Instance.LeoAnimationCurve)
+            .SetEase(GlobalInit.Instance.CommonAnimationCurve)
             .Pause()
             .OnRewind(() => {DestroyWindow(obj.GetComponent<UIPanelViewBase>());});
         switch (direction)

@@ -75,7 +75,11 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
     /// <param name="p"></param>
     private void GameServerViewEnterGameClick(object[] p)
     {
-        SetLastLoginInfos();
+        SetLastLoginInfos();    //记录最后登录的大区
+                                //TODO：开始连接对应服务器的IP和port，并检查当前大区下是否有角色
+#if SINGLE_MODE
+        //TODO 单机模式下不用验证connect是否成功，直接根据port去验证是否有角色即可
+#endif
     }
     #endregion
 
@@ -165,7 +169,10 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
             mSelectServerView.SetInfosItem(1);
         }
     }
-
+    /// <summary>
+    /// 服务器返回修改最后登录区服的信息后，进入选择角色场景
+    /// </summary>
+    /// <param name="args"></param>
     private void OnSetLastLoginInfosCallback(CallbackArgs args)
     {
         if (args.hasError)
@@ -175,7 +182,7 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
         else
         {
             LogUtil.Log(args.json);
-            SceneManager.Instance.LoadMainScene();
+            ScenesManager.Instance.LoadSelectRoleScene();
         }
     }
     #endregion

@@ -1,8 +1,11 @@
-//===================================================
-//作    者：边涯  http://www.u3dol.com  QQ群：87481002
-//创建时间：2018-02-25 22:40:38
-//备    注：
-//===================================================
+//-----------------------------------------------------------
+//	Author: Ich
+//  CreateTime: 2020-07-01 14:51:05
+//  Version: 1.0.0
+//  ProjectURL: https://github.com/ich-official/IchSaga
+//  Contact_Me: ich_official@163.com
+//	Update:手动修改过一次，添加了区服判断
+//-----------------------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -16,6 +19,7 @@ public struct Account_EnterGameReqProto : IProto
 
     public int RoleId; //角色编号
     public int ChannelId; //渠道号
+    public int GameServerId;    //游戏大区的Id号
 
     public byte[] ToArray()
     {

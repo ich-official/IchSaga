@@ -39,18 +39,18 @@ public class SceneMainController : MonoBehaviour {
         obj = RoleManager.Instance.LoadRole("RoleModel_Cike");
         obj.transform.position = playerSpawnPoint.position;
         //找到当前player
-        GlobalInit.Instance.currentPlayer = obj.GetComponent<PlayerController>();
+        GlobalInit.Instance.currentPlayer = obj.GetComponent<RoleController>();
 #if UNITY_EDITOR
         if (GlobalInit.Instance.currentPlayerUsername == "" || GlobalInit.Instance.currentPlayerUsername == null)
         {
-            GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = "绫祈丿er",currentHP=500,maxHP=500 }, new PlayerAI_Battle(obj.GetComponent<PlayerController>()));
+            GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = "绫祈丿er",currentHP=500,maxHP=500 }, new PlayerAI_Battle(obj.GetComponent<RoleController>()));
         }
         else
         {
-            GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<PlayerController>()));
-        }      
+            GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<RoleController>()));
+        }
 #else
-        GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<PlayerController>()));
+        GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<RoleController>()));
 #endif
 
         Leo_UIPlayerInfo.Instance.SetPlayerInfo();
@@ -69,7 +69,7 @@ public class SceneMainController : MonoBehaviour {
         RaycastHit[] hitAll = Physics.RaycastAll(ray, Mathf.Infinity, 1 << LayerMask.NameToLayer("Role"));
         if (hitAll.Length > 0)
         {
-            PlayerController enemy = hitAll[0].collider.gameObject.GetComponent<PlayerController>();
+            RoleController enemy = hitAll[0].collider.gameObject.GetComponent<RoleController>();
             if (enemy.currentRoleType == RoleType.ENEMY)
             {
                 //如果射线碰撞到了敌人，就跑到攻击范围内进行攻击

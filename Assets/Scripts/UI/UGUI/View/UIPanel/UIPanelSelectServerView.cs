@@ -152,6 +152,8 @@ public class UIPanelSelectServerView : UIPanelViewBase
         LogUtil.Log("点击了详情：" + entity.Name+","+entity.Port);
         GlobalCache.Instance.Account_LastLoginServerId = entity.Id;
         GlobalCache.Instance.Account_LastLoginServerName = entity.Name;
+        GlobalCache.Instance.GameServer_CurrentIp = entity.Ip;
+        GlobalCache.Instance.GameServer_CurrentPort = entity.Port;
         //实现OnInfoItemClick委托，进行传递值到EnterServerView上
         if (OnInfoItemClick != null)
         {

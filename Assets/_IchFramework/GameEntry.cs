@@ -35,7 +35,7 @@ namespace IchFramework
         public static ObjPoolComponent ObjPoolCompnt{get; private set;}
         public static ProcedureComponent ProcedureCompnt{get; private set;}
         public static ResourceComponent ResourceCompnt{get; private set;}
-        public static SceneComponent SceneCompnt{get; private set;}
+        public static ScenesComponent SceneCompnt{get; private set;}
         public static SettingsComponent SettingsCompnt{get; private set;}
         public static SocketComponent SocketCompnt{get; private set;}
         public static UIComponent UICompnt{get; private set;}
@@ -109,7 +109,7 @@ namespace IchFramework
             ObjPoolCompnt = GetIchComponent<ObjPoolComponent>();
             ProcedureCompnt = GetIchComponent<ProcedureComponent>();
             ResourceCompnt = GetIchComponent<ResourceComponent>();
-            SceneCompnt = GetIchComponent<SceneComponent>();
+            SceneCompnt = GetIchComponent<ScenesComponent>();
             SettingsCompnt = GetIchComponent<SettingsComponent>();
             SocketCompnt = GetIchComponent<SocketComponent>();
             UICompnt = GetIchComponent<UIComponent>();
@@ -155,7 +155,8 @@ namespace IchFramework
         void Start()
         {
             InitIchComponent();
-            //Debug.Log(Application.persistentDataPath);
+            //PC的persist参考路径：C:/Users/Administrator/AppData/LocalLow/Ich_Official/IchSaga
+            Debug.Log(Application.persistentDataPath);
         }
 
         void Update()

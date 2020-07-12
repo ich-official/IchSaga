@@ -40,10 +40,10 @@ public class UIPanelDialogView : MonoBehaviour {
     /// <param name="msg"></param>
     /// <param name="okAction"></param>
     /// <param name="cancelAction"></param>
-    public void Show(string msg, Action okAction, Action cancelAction, DialogType type = DialogType.OK)
+    public void Show(string msg, Action okAction, Action cancelAction, UIDialogType type = UIDialogType.OK)
     {
         gameObject.transform.localPosition = Vector3.zero;
-        if (type == DialogType.OK)
+        if (type == UIDialogType.OK)
         {
             //只有确定按钮
             dialogCancelBtn.gameObject.SetActive(false);

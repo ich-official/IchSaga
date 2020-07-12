@@ -98,7 +98,7 @@ public class SocketManagerServer : SimulatorBase<SocketManagerServer>
                 protoCode = stream.ReadUShort();
                 stream.Read(protoContent, 0, protoContent.Length);
                 SocketDispatcher.Instance.Dispatch(protoCode, protoContent);
-                EventDispatcherS.Instance.Dispatch(protoCode, null, protoContent);
+                //EventDispatcherS.Instance.Dispatch(protoCode, null, protoContent);
             }
             //41课以后使用网络协议，增加此部分判断逻辑
             //43课以后使用观察者模式
@@ -125,6 +125,9 @@ public class SocketManagerServer : SimulatorBase<SocketManagerServer>
         {
             Debug.Log("服务器解析数据包错误！");
         }
+        //2020-06-25新增，一次接收结束后把stream里的内容清空，保证下次接收的内容是新的
+        mReceiveStream.Position = 0;
+        mReceiveStream.SetLength(0);
     }
     #endregion 
 

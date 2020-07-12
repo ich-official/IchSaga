@@ -36,7 +36,7 @@ public class EnemySpawnPoint : MonoBehaviour {
                 obj.transform.parent = this.transform;
                 obj.transform.position = this.transform.position;
     
-                PlayerController controller = obj.GetComponent<PlayerController>();
+                RoleController controller = obj.GetComponent<RoleController>();
                 controller.SpawnPosition = obj.transform.position;
 
                 EnemyInfo enemyInfo = new EnemyInfo();
@@ -53,7 +53,7 @@ public class EnemySpawnPoint : MonoBehaviour {
         }
         
     }
-    public void OnRoleDie(PlayerController controller)
+    public void OnRoleDie(RoleController controller)
     {
         mCurrentCount--;
         Destroy(controller.gameObject);

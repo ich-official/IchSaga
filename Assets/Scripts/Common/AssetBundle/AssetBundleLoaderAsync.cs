@@ -44,6 +44,7 @@ public class AssetBundleLoaderAsync : MonoBehaviour {
         bundle = request.assetBundle;
         if (OnABLoadComplete != null)
         {
+            Debug.Log("异步加载完成！");
             OnABLoadComplete(bundle.LoadAsset(mABName));
 
             Destroy(this.gameObject);

@@ -199,7 +199,7 @@ public class DownloadManager : SingletonBase<DownloadManager> {
     {
         string strVersionUrl = DownloadUrl + mVersionFileName; //服务器的版本文件路径，txt文件，存放版本信息的
         Debug.Log("模拟器路径：" + strVersionUrl);
-        // 读取这个txt文件
+        // 读取这个服务器的txt文件
         DownloadAssetBundle.Instance.InitServerVersion(strVersionUrl, OnInitVersionCallback);
     }
 
@@ -217,7 +217,7 @@ public class DownloadManager : SingletonBase<DownloadManager> {
             //本地有版本文件，则开始比对
             //服务器端数据的dic<文件名,MD5>
             Dictionary<string, string> serverDic = PackDownloadDataDic(serverDownloadedEntity);
-
+            Debug.Log("正在比对服务器版本文件...");
 
             //读取本地版本信息
             string content = IOUtil.GetFileText(mLocalVersionFile);
@@ -251,7 +251,7 @@ public class DownloadManager : SingletonBase<DownloadManager> {
         }
         else
         {
-            //本地没有版本文件，则资源全部下载
+            //本地没有版本文件，则从服务器上下载全部更新内容
             for (int i = 0; i < serverDownloadedEntity.Count; i++)
             {
                 if (serverDownloadedEntity[i].IsFirstData)

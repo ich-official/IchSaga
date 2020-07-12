@@ -7,6 +7,7 @@
 //	
 //-----------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,11 +32,22 @@ public class ServerEntry : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    private void OnDestroy()
+    {
+        ReleaseAllServerController();
+    }
+
     /// <summary>
     /// 把所有服务器的controller加载一下，同真正服务器的逻辑
     /// </summary>
     private void InitAllServerController()
     {
         RoleCtrlrS.Instance.Init();
+    }
+
+    private void ReleaseAllServerController()
+    {
+        RoleCtrlrS.Instance.MyDispose();
     }
 }

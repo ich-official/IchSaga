@@ -17,7 +17,7 @@ public interface IRoleAI  {
     /// <summary>
     /// 当前控制的角色（主角、敌军、友军、其他等）
     /// </summary>
-    PlayerController CurrentRole
+    RoleController CurrentRole
     {
         get;
         set;

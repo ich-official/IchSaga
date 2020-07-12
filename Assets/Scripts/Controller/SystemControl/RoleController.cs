@@ -14,7 +14,7 @@ using UnityEngine;
 /// <summary>
 /// 角色控制器，控制摄像机跟随、移动、战斗参数等，还有显示头上血条等
 /// </summary>
-public class PlayerController : RoleControllerBase{
+public class RoleController : RoleControllerBase{
 
     Ray ray;
     RaycastHit hit;
@@ -77,7 +77,7 @@ public class PlayerController : RoleControllerBase{
     /// <summary>
     /// 视野范围内发现的敌人，
     /// </summary>
-    public PlayerController viewedEnemy;
+    public RoleController viewedEnemy;
 
     /// <summary>
     /// 角色受伤扣血，委托修改玩家UI上的血条
@@ -85,7 +85,7 @@ public class PlayerController : RoleControllerBase{
     public delegate void RoleHurt();
     public RoleHurt OnRoleHurt;
 
-    public System.Action<PlayerController> OnRoleDie;
+    public System.Action<RoleController> OnRoleDie;
 
 
 	void Start () {
@@ -131,14 +131,15 @@ public class PlayerController : RoleControllerBase{
 
     void Update()
     {
-        DoAI();
-        MovePlayer();
-        DestroyBox();
-        CameraAutoFollow(); 
         if (currentPlayerFSM != null)
         {
             currentPlayerFSM.OnUpdate();
         }
+        DoAI();
+        //MovePlayer();
+        DestroyBox();
+        CameraAutoFollow(); 
+
     }
 
     void DoAI()

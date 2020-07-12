@@ -13,7 +13,7 @@ using System.Collections;
 /// <summary>
 /// 场景切换类
 /// </summary>
-public class SceneManager : SingletonBase<SceneManager>{
+public class ScenesManager : SingletonBase<ScenesManager>{
 
     //当前场景的名字
     public SceneName currentSceneName
@@ -32,6 +32,12 @@ public class SceneManager : SingletonBase<SceneManager>{
     public void LoadMainScene()
     {
         currentSceneName = SceneName.MAINSCENE5X;
+        Application.LoadLevel("Loading5x");
+    }
+
+    public void LoadSelectRoleScene()
+    {
+        currentSceneName = SceneName.SELECT_ROLE;
         Application.LoadLevel("Loading5x");
     }
 }

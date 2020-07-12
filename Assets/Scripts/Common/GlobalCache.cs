@@ -26,4 +26,8 @@ public class GlobalCache : SingletonBase<GlobalCache>
     public int GameServer_CurrentPort;   //当前选择的区服端口号
     #endregion
 
+    #region 角色操作
+    public int Role_CurrentRoleId;      //当前选择的角色ID
+    #endregion
+
 }

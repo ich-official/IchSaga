@@ -1,4 +1,4 @@
-//-----------------------------------------------------------
+ï»¿//-----------------------------------------------------------
 //	Author: Ich
 //  CreateTime: 2020-06-19 21:14:49
 //  Version: 1.0.0
@@ -12,47 +12,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// socketĞ­Òé·½Ê½£¬ÕËºÅÖĞ½ÇÉ«Ïà¹ØµÄcontroller£¬µÈÓÚRoleController£¬
+/// socketåè®®æ–¹å¼ï¼Œè´¦å·ä¸­è§’è‰²ç›¸å…³çš„controllerï¼Œç­‰äºRoleControllerï¼Œ
 /// </summary>
 public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
     /// <summary>
-    /// ³õÊ¼»¯ÕËºÅ-½ÇÉ«Ïà¹Ø
+    /// åˆå§‹åŒ–è´¦å·-è§’è‰²ç›¸å…³
     /// </summary>
     public void Init()
     {
-        //Ôö¼Ó¼àÌı
-        #region µÇÂ¼Ïà¹Ø
-        //¿Í»§¶Ë·¢ËÍµÇÂ¼Çø·şÏûÏ¢
+        //å¢åŠ ç›‘å¬
+        #region ç™»å½•ç›¸å…³
+        //å®¢æˆ·ç«¯å‘é€ç™»å½•åŒºæœæ¶ˆæ¯
         SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_LoginGameServerReqProto, OnLoginGameServer);
 
-        //¿Í»§¶Ë·¢ËÍ´´½¨½ÇÉ«ÏûÏ¢
-        EventDispatcherS.Instance.AddEventListener(ProtoCodeDefine.Account_AddRoleReqProto, OnAddRole);
+        //å®¢æˆ·ç«¯å‘é€åˆ›å»ºè§’è‰²æ¶ˆæ¯
+        SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_AddRoleReqProto, OnAddRole);
 
-        //¿Í»§¶Ë·¢ËÍÉ¾³ı½ÇÉ«ÏûÏ¢
-        EventDispatcherS.Instance.AddEventListener(ProtoCodeDefine.Account_DeleteRoleReqProto, OnDeleteRole);
+        //å®¢æˆ·ç«¯å‘é€åˆ é™¤è§’è‰²æ¶ˆæ¯
+        SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_DeleteRoleReqProto, OnDeleteRole);
 
-        //¿Í»§¶Ë·¢ËÍ½øÈëÓÎÏ·ÏûÏ¢
-        EventDispatcherS.Instance.AddEventListener(ProtoCodeDefine.Account_EnterGameReqProto, OnEnterGame);
+        //å®¢æˆ·ç«¯å‘é€è¿›å…¥æ¸¸æˆæ¶ˆæ¯
+        SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_EnterGameReqProto, OnEnterGame);
         #endregion
     }
 
-    private void OnEnterGame(RoleS role, byte[] buffer)
+    private void OnEnterGame( byte[] buffer)
     {
-        throw new NotImplementedException();
+        Account_EnterGameReqProto proto = Account_EnterGameReqProto.GetProto(buffer);
+        int roleID = proto.RoleId;
+
+        EnterGameServerResp();
     }
 
-    private void OnDeleteRole(RoleS role, byte[] buffer)
+    private void OnDeleteRole( byte[] buffer)
     {
-        throw new NotImplementedException();
+        Account_DeleteRoleReqProto proto = Account_DeleteRoleReqProto.GetProto(buffer);
+        int roleID = proto.RoleId;
+        Debug.Log("server: roleID---" + roleID);
+        DeleteRoleServerResp(roleID);
+
     }
 
-    private void OnAddRole(RoleS role, byte[] buffer)
+    private void OnAddRole(byte[] buffer)
     {
-        throw new NotImplementedException();
+        Account_AddRoleReqProto proto = Account_AddRoleReqProto.GetProto(buffer);
+        int classId = proto.ClassId;
+        string nickName = proto.RoleNickName;
+        int gameServerId = proto.GameServerId;
+        AddRoleServerResp(classId, nickName, gameServerId);
     }
+
 
     /// <summary>
-    /// µÇÂ½Ê±·şÎñÆ÷µÄ²Ù×÷
+    /// ç™»é™†æ—¶æœåŠ¡å™¨çš„æ“ä½œ
     /// </summary>
     /// <param name="role"></param>
     /// <param name="buffer"></param>
@@ -60,30 +72,45 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
     {
         Account_LoginGameServerReqProto proto = Account_LoginGameServerReqProto.GetProto(buffer);
 
-        //Íæ¼ÒÕÊºÅ
+        //ç©å®¶å¸å·
         int accountId = proto.AccountId;
-
+        int gameServerId = proto.GameServerId;
         //role.AccountId = accountId;
-        LoginGameServerResp(accountId);
+        LoginGameServerResp(accountId,gameServerId);
     }
     /// <summary>
-    /// ·şÎñÆ÷²Ù×÷£¬°Ñ¿Í»§¶Ë´«À´µÄaccountID²éÑ¯¶ÔÓ¦µÄRoleID£¬²¢°ÑÕâ¸örole¶ÔÏó·µ»Ø¸ø¿Í»§¶Ë
+    /// æœåŠ¡å™¨æ“ä½œï¼ŒæŠŠå®¢æˆ·ç«¯ä¼ æ¥çš„accountIDæŸ¥è¯¢å¯¹åº”çš„RoleIDï¼Œå¹¶æŠŠè¿™ä¸ªroleå¯¹è±¡è¿”å›ç»™å®¢æˆ·ç«¯
+    /// 20.07.10Ichæ–°å¢åŒºæœåˆ¤æ–­
     /// </summary>
     /// <param name="role"></param>
     /// <param name="accountId"></param>
-    private void LoginGameServerResp(int accountId)
+    private void LoginGameServerResp(int accountId,int gameServerId)
     {
         Account_LoginGameServerRespProto proto = new Account_LoginGameServerRespProto();
-        //TODO Õâ²½ÊÇµ÷ÓÃCacheModel²ãÈ¥Êı¾İ¿â²é½ÇÉ«£¬·µ»ØÒ»¸ö½ÇÉ«ÊµÌåÁĞ±í£¬ºóĞø¸Ä³ÉÎÒ×Ô¼ºµÄÂß¼­    £¨select * from Role where [AccountId]=accountId£©
+        //TODO è¿™æ­¥æ˜¯è°ƒç”¨CacheModelå±‚å»æ•°æ®åº“æŸ¥è§’è‰²ï¼Œè¿”å›ä¸€ä¸ªè§’è‰²å®ä½“åˆ—è¡¨ï¼Œåç»­æ”¹æˆæˆ‘è‡ªå·±çš„é€»è¾‘    ï¼ˆselect * from Role where [AccountId]=accountIdï¼‰
 
-        List<RoleEntity> lst=RoleDBModelServer.Instance.GetRoles(accountId);
+        List<RoleEntity> lst=RoleDBModelServer.Instance.GetRoles(accountId,gameServerId);
+        int count = 0;
+        while (count < lst.Count)
+        {
+            //å¦‚æœè§’è‰²çŠ¶æ€æ˜¯å·²åˆ é™¤ï¼Œåˆ™ä¸å‘å®¢æˆ·ç«¯è¿”å›è¯¥è§’è‰²
+            if (lst[count].Status == EnumEntityStatus.Deleted)
+            {
+                Debug.Log(lst[count].NickName + "æ˜¯å·²åˆ é™¤çš„è§’è‰²ï¼");
+                lst.RemoveAt(count);                
+            }
+            else
+            {
+                count++;
+            }
+        }
         //List<RoleEntity> lst = RoleCacheModel.Instance.GetList(condition: string.Format("[AccountId]={0}", accountId));
 
         if (lst != null && lst.Count > 0)
         {
             proto.RoleCount = lst.Count;
             proto.RoleList = new List<Account_LoginGameServerRespProto.RoleItem>();
-
+            GlobalCache.Instance.Account_CurrentId = accountId; //ç™»é™†æˆåŠŸæ—¶è®°å½•ä¸€ä¸‹å½“å‰çš„accountIdï¼Œåé¢åˆ›å»ºè§’è‰²æ—¶ä½¿ç”¨
             for (int i = 0; i < lst.Count; i++)
             {
                 proto.RoleList.Add(new Account_LoginGameServerRespProto.RoleItem()
@@ -100,13 +127,50 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
             proto.RoleCount = 0;
         }
 
-        //¸ø¿Í»§¶Ë·¢ÏûÏ¢£¬ºóĞø¸Ä³ÉÎÒ×Ô¼ºµÄ·½Ê½
+        //ç»™å®¢æˆ·ç«¯å‘æ¶ˆæ¯ï¼Œ
         SocketManagerServer.Instance.SendMessageToClient(proto.ToArray());
         //role.Client_Socket.SendMsg(proto.ToArray());
     }
-    
-    public override void Dispose()
+
+    private void AddRoleServerResp(int classId,string nickName,int gameServerId)
     {
-        //ÒÆ³ı¼àÌı
+        Account_AddRoleRespProto proto = new Account_AddRoleRespProto();
+        bool isSuccess = RoleDBModelServer.Instance.AddRole(classId,nickName,gameServerId);
+        proto.IsSuccess = isSuccess;
+        if (isSuccess == false) proto.MsgCode = Constant.ROLE_ADD_FAIL;
+        SocketManagerServer.Instance.SendMessageToClient(proto.ToArray());
+    }
+
+    private void DeleteRoleServerResp(int roleId)
+    {
+        Account_DeleteRoleRespProto proto = new Account_DeleteRoleRespProto();
+        bool isSuccess = RoleDBModelServer.Instance.DeleteRole(roleId);
+        proto.IsSuccess = isSuccess;
+        if (isSuccess == false) proto.MsgCode = Constant.ROLE_DELETE_FAIL;
+        SocketManagerServer.Instance.SendMessageToClient(proto.ToArray());
+    }
+
+    private void EnterGameServerResp()
+    {
+        Account_EnterGameRespProto proto = new Account_EnterGameRespProto();
+        bool isSuccess = true;  //æš‚æ—¶å†™æ­»
+        proto.IsSuccess = isSuccess;
+        if (isSuccess == false) proto.MsgCode = Constant.ENTER_GAME_FAIL;
+        SocketManagerServer.Instance.SendMessageToClient(proto.ToArray());
+    }
+
+    public void MyDispose()
+    {
+
+        #region ç™»å½•ç›¸å…³
+        SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_LoginGameServerReqProto, OnLoginGameServer);
+
+        SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_AddRoleReqProto, OnAddRole);
+
+        SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_DeleteRoleReqProto, OnDeleteRole);
+
+        SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_EnterGameReqProto, OnEnterGame);
+        #endregion
+
     }
 }

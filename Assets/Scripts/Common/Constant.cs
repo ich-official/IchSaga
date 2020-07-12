@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 /// <summary>
 /// 存放所有常量
 /// </summary>
@@ -37,16 +38,20 @@ public class Constant  {
 
 
 
-    #region Http模拟器错误码
+    #region 与服务器通信的错误码
     public const int UNKNOWN = 1000;
     public const int SQL_ERROR=1001;    //sql语句执行错误
 
-    public const int ACCOUNT_USER_EXIST = 1002; //用户已存在
-    public const int ACCOUNT_USER_NOT_EXIST = 1003; //用户不存在
-    public const int ACCOUNT_PWD_WRONG = 1004;  //用户名或密码错误
+    public const int ACCOUNT_USER_EXIST = 2002; //用户已存在
+    public const int ACCOUNT_USER_NOT_EXIST = 2003; //用户不存在
+    public const int ACCOUNT_PWD_WRONG = 2004;  //用户名或密码错误
 
-    public const int GAMESERVER_NO_SERVER_INFO = 1005;//没有查询到服务器信息
+    public const int GAMESERVER_NO_SERVER_INFO = 3001;//没有查询到服务器信息
 
-    #endregion 
+    public const int ROLE_ADD_FAIL = 4001;  //创建角色失败，原因：1、昵称已存在 2、昵称违规
+    public const int ENTER_GAME_FAIL = 4002;    //进入游戏失败，暂时未定义原因
+    public const int ROLE_DELETE_FAIL = 4003;   //删除角色失败，原因：未找到对应的角色ID
+    #endregion
+
 
 }

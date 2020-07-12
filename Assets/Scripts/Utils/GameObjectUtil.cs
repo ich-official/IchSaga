@@ -29,4 +29,43 @@ public static class GameObjectUtil   {
         }
         return t;
     }
+    /// <summary>
+    /// 将monos数组里的全部对象置为null，在垃圾回收时使用
+    /// </summary>
+    /// <param name="monos"></param>
+    public static void SetNull(this MonoBehaviour[] monos)
+    {
+        if (monos != null)
+        {
+            for (int i = 0; i < monos.Length; i++)
+            {
+                monos[i] = null;
+            }
+            monos = null;
+        }
+    }
+
+    public static void SetNull(this Transform[] monos)
+    {
+        if (monos != null)
+        {
+            for (int i = 0; i < monos.Length; i++)
+            {
+                monos[i] = null;
+            }
+            monos = null;
+        }
+    }
+
+    public static void SetNull(this Sprite[] monos)
+    {
+        if (monos != null)
+        {
+            for (int i = 0; i < monos.Length; i++)
+            {
+                monos[i] = null;
+            }
+            monos = null;
+        }
+    }
 }

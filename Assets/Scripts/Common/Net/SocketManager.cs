@@ -15,6 +15,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+/// <summary>
+/// 本类是socket方式进行网络交互的核心类，本类有以下功能：
+/// 1，封包、拆包 2，发送、接收和解析数据包 3、用观察者派发数据包
+/// </summary>
 public class SocketManager : MonoBehaviour {
 
     #region  //单例，继承MonoBehaviour时的单例写法，返回的是一个组件
@@ -124,6 +128,66 @@ public class SocketManager : MonoBehaviour {
         
     }
 
+
+
+    #region 单机模式（本地服务器）的方法
+    #region 发送数据
+    public void SendMessageToLocalServer(byte[] dataPkg, bool isDIYReturnMsg = false, byte[] returnDIYPkg = null)
+    {
+        byte[] send = MakeDataPkg(dataPkg);
+        if (isDIYReturnMsg == true)
+        {
+            SocketManagerServer.Instance.ServerOperator(send, true);
+            SocketManagerServer.Instance.SendMessageToClient(returnDIYPkg);      //模拟服务器向客户端发送指定消息
+        }
+        else
+        {
+            SocketManagerServer.Instance.ServerOperator(send);    //服务器返回的消息模拟真实的数据派发方式进行，在ServerSimulatorRuntime中
+        }
+        Debug.Log("client:已向服务器发送数据包！");
+
+    }
+    #endregion
+
+
+    #region 接收数据
+    /// <summary>
+    /// 单机模式下模拟服务器返回数据
+    /// </summary>
+    /// <param name="localResult"></param>
+    public void ReceiveCallbackSingle(byte[] localResult)
+    {
+        mReceiveStream.Position = mReceiveStream.Length;
+        mReceiveStream.Write(localResult, 0, localResult.Length); //数据写进内存，等待操作
+        //根据我们自定义数据包的格式，大于2字节代表有一个包传过来了
+        if (mReceiveStream.Length > 2)
+        {
+            mReceiveStream.Position = 0;
+            int currentMsgLen = mReceiveStream.ReadUShort();    //包体长度
+            int currentFullLen = 2 + currentMsgLen; //包头+包体长度
+            if (mReceiveStream.Length >= currentFullLen)    //接收的数据包大于一个完整包的长度，表示至少有一个完整包传过来了
+            {
+                byte[] buffer = new byte[currentMsgLen];    //此buffer为真实数据
+                mReceiveStream.Position = 2;        //根据我们自定义的数据包格式，刨除前2位，后面的是真实数据
+                mReceiveStream.Read(buffer, 0, currentMsgLen);
+                lock (mReceiveQueue)
+                {
+                    mReceiveQueue.Enqueue(buffer);      //把原始数据包加入队列中
+                }
+            }
+            else { }
+        }
+        //2020-06-25新增，一次接收结束后把stream里的内容清空，保证下次接收的内容是新的
+        mReceiveStream.Position = 0;
+        mReceiveStream.SetLength(0);
+    }
+    #endregion
+
+    #endregion
+
+
+
+    #region 网络连接的方法
     public void Connect(string IP, int port)
     {
         if (client != null && client.Connected) return;
@@ -136,7 +200,7 @@ public class SocketManager : MonoBehaviour {
             ReceiveMessage();
             Debug.Log("connect success");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.Log("connect fail");
             Debug.Log(e.Message);
@@ -145,6 +209,35 @@ public class SocketManager : MonoBehaviour {
 
 
     #region 发送数据
+
+    /// <summary>
+    /// 把数据包加入队列，等待队列操作
+    /// </summary>
+    /// <param name="msg"></param>
+    public void SendMessageToQueue(byte[] msg)
+    {
+        //把数据做成符合服务器格式的数据包
+        byte[] sendData = MakeDataPkg(msg);
+        //加入队列时，先锁定防止操作出错
+        lock (mSendQueue)
+        {
+            //把数据包加入队列，等待队列操作
+            mSendQueue.Enqueue(sendData);
+            Debug.Log("数据加入队列完毕");
+            mCheckSendQueue.BeginInvoke(null, null);
+        }
+
+    }
+
+    /// <summary>
+    /// 把数据包真正传给服务器
+    /// </summary>
+    public void SendMessageToServer(byte[] dataPkg)
+    {
+        client.BeginSend(dataPkg, 0, dataPkg.Length, SocketFlags.None, SendDataCallback, client);
+        Debug.Log("消息已发送");
+    }
+
     /// <summary>
     /// 检查队列是否还有未发送的数据包
     /// </summary>
@@ -179,8 +272,9 @@ public class SocketManager : MonoBehaviour {
         }
         ushort crc16 = Crc16.CalculateCrc16(data);  //3、CRC校验
 
-        using(MemoryStreamUtil stream=new MemoryStreamUtil()){
-            stream.WriteUShort((ushort)(data.Length+3));    //写包头，+3是因为多了一个bool，一个ushort，一共3字节
+        using (MemoryStreamUtil stream = new MemoryStreamUtil())
+        {
+            stream.WriteUShort((ushort)(data.Length + 3));    //写包头，+3是因为多了一个bool，一个ushort，一共3字节
             stream.WriteBool(isCompress);   //写压缩标志
             stream.WriteUShort(crc16);       //写CRC
             stream.Write(data, 0, data.Length); //写加密后的真实数据
@@ -189,33 +283,7 @@ public class SocketManager : MonoBehaviour {
         Debug.Log("数据包构建完毕！");
         return returnBuffer;
     }
-    /// <summary>
-    /// 把数据包加入队列，等待队列操作
-    /// </summary>
-    /// <param name="msg"></param>
-    public void SendMessageToQueue(byte[] msg)
-    {
-        //把数据做成符合服务器格式的数据包
-        byte[] sendData = MakeDataPkg(msg);
-        //加入队列时，先锁定防止操作出错
-        lock (mSendQueue)
-        {
-            //把数据包加入队列，等待队列操作
-            mSendQueue.Enqueue(sendData);
-            Debug.Log("数据加入队列完毕");
-            mCheckSendQueue.BeginInvoke(null, null);
-        }
 
-    }
-
-    /// <summary>
-    /// 把数据包真正传给服务器
-    /// </summary>
-    public void SendMessageToServer(byte[] dataPkg)
-    {
-        client.BeginSend(dataPkg, 0, dataPkg.Length, SocketFlags.None, SendDataCallback, client);
-        Debug.Log("消息已发送");
-    }
 
     //给服务器传数据包后的回调方法
     public void SendDataCallback(IAsyncResult result)
@@ -227,7 +295,8 @@ public class SocketManager : MonoBehaviour {
         OnCheckSendQueueCallback();
     }
 
-    #endregion 
+    #endregion
+
 
     #region 接收数据
     private void ReceiveMessage()
@@ -262,7 +331,7 @@ public class SocketManager : MonoBehaviour {
                             {
                                 mReceiveQueue.Enqueue(buffer);      //加入接收队列中
                             }
-                            
+
                             using (MemoryStreamUtil stream = new MemoryStreamUtil())
                             {
                                 string data = stream.ReadUTF8String();  //
@@ -305,40 +374,18 @@ public class SocketManager : MonoBehaviour {
             {
                 Debug.Log("断开连接else");
             }
-        }catch(Exception e){
+        }
+        catch (Exception e)
+        {
             Debug.Log(e.Message);
             Debug.Log("断开连接catch");
         }
     }
 
-    /// <summary>
-    /// 单机模式下模拟服务器返回数据
-    /// </summary>
-    /// <param name="fakeResult"></param>
-    public void ReceiveCallbackSingle(byte[] fakeResult)
-    {
-        mReceiveStream.Position = mReceiveStream.Length;
-        mReceiveStream.Write(fakeResult, 0, fakeResult.Length); //数据写进内存，等待操作
-        //根据我们自定义数据包的格式，大于2字节代表有一个包传过来了
-        if (mReceiveStream.Length > 2)
-        {
-            mReceiveStream.Position = 0;
-            int currentMsgLen = mReceiveStream.ReadUShort();    //包体长度
-            int currentFullLen = 2 + currentMsgLen; //包头+包体长度
-            if (mReceiveStream.Length >= currentFullLen)    //接收的数据包大于一个完整包的长度，表示至少有一个完整包传过来了
-            {
-                byte[] buffer = new byte[currentMsgLen];    //此buffer为真实数据
-                mReceiveStream.Position = 2;        //根据我们自定义的数据包格式，刨除前2位，后面的是真实数据
-                mReceiveStream.Read(buffer, 0, currentMsgLen);
-                lock (mReceiveQueue)
-                {
-                    mReceiveQueue.Enqueue(buffer);      //把原始数据包加入队列中
-                }
-            }
-            else { }
-        }
-    }
-    #endregion 
+
+    #endregion
+    #endregion
+
     void OnDestroy()
     {
         if (client != null && client.Connected)
