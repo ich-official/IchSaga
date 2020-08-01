@@ -15,7 +15,7 @@ using System.Text;
 
 /// <summary>
 /// 把本项目的数据类型转换成byte[]数组类型。笔记：short=2字节 int=4字节 long=8字节 float=4字节 double=8字节 char=4字节 
-/// MMO_MemoryStream
+/// MemoryStreamUtil
 /// </summary>
 public class MemoryStreamUtil : MemoryStream {
     public MemoryStreamUtil()

@@ -15,10 +15,24 @@ using System.Collections.Generic;
 /// </summary>
 public class RoleManager : SingletonBase<RoleManager>
 {
-    /// <summary>
-    /// 角色字典
-    /// </summary>
-  //  Dictionary<string, GameObject> mRoleDic = new Dictionary<string, GameObject>();
+
+    bool isInitMyRole=false;  //是否已经初始化了我的角色
+    public void InitMyRole()
+    {
+        if (!isInitMyRole)
+        {
+            if (GlobalInit.Instance.myRoleInfo != null)
+            {
+                GameObject myRoleObj = Object.Instantiate(GlobalInit.Instance.mClassDic[GlobalInit.Instance.myRoleInfo.ClassId+1]);//excel里编号从1开始，这里+1，下标和excel保持一致
+                Object.DontDestroyOnLoad(myRoleObj);
+                GlobalInit.Instance.currentPlayer = myRoleObj.GetComponent<RoleController>();
+                GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, GlobalInit.Instance.myRoleInfo, new PlayerAI_Battle(GlobalInit.Instance.currentPlayer));
+            }
+            isInitMyRole = true;
+
+        }
+    }
+
 
     public GameObject LoadRole(string name)
     {

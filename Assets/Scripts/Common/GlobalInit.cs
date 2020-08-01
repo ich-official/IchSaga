@@ -10,7 +10,7 @@
 
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 /// <summary>
 /// 全局设置，刚进入游戏时要做的各种必要赋值和操作
@@ -24,23 +24,29 @@ public class GlobalInit : MonoBehaviour {
     [HideInInspector]
     public long InitServerTimeStamp;  //游戏开始时服务器时间戳
 
-    //获取当前时间戳
+    //所有职业的字典，通过读本地数据表class.xls获取
     [HideInInspector]
-    public long CurrentTimeStamp { 
-        get { return InitServerTimeStamp + (long)RealTime.time; } 
-    } 
+    public Dictionary<int, GameObject> mClassDic = new Dictionary<int, GameObject>();
+    [HideInInspector]
+    public PlayerInfo myRoleInfo;    //我的角色详情
+    [HideInInspector]
+    public RoleController currentPlayer;    //我的角色控制器
     /// <summary>
     /// UITween曲线，NGUI也可以用
     /// </summary>
     public AnimationCurve CommonAnimationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
 
-    [HideInInspector]
-    public RoleController currentPlayer;
+
 
     [HideInInspector]
     public string currentPlayerUsername;
 
-
+    //获取当前时间戳
+    [HideInInspector]
+    public long CurrentTimeStamp
+    {
+        get { return InitServerTimeStamp + (long)RealTime.time; }
+    }
     void Awake()
     {
         Instance = this;
@@ -55,6 +61,7 @@ public class GlobalInit : MonoBehaviour {
             HttpSimulator.Instance.DoPostSingle(ServerAPI.Time, "", OnTimeCallback);
         }
 	}
+
 
     private void OnTimeCallback(CallbackArgs args)
     {

@@ -16,7 +16,6 @@ using UnityEngine;
 /// </summary>
 public class SceneSelectRoleController : MonoBehaviour {
 
-    private Dictionary<int, GameObject> mClassDic=new Dictionary<int, GameObject>();  //所有职业的字典，通过读本地数据表class.xls获取
     private List<ClassEntity> mClassList;
     private Dictionary<int, RoleController> mRoleCtrlDic = new Dictionary<int, RoleController>();    //角色prefab的字典
 
@@ -70,6 +69,8 @@ public class SceneSelectRoleController : MonoBehaviour {
         SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_EnterGameRespProto, OnEnterGameServerResp);
         //监听服务器返回删除角色是否成功的回调（假删，改角色状态）
         SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_DeleteRoleRespProto, OnDeleteRoleServerResp);
+        //监听服务器根据roleID传回的role具体属性详情
+        SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_RoleInfoRespProto, OnGetRoleInfoServerResp);
         LoadClassObj();
 
         LoginGameServer();
@@ -82,6 +83,8 @@ public class SceneSelectRoleController : MonoBehaviour {
 
 
     #region 与服务器交互
+
+    #region 登陆注册->选择角色
     /// <summary>
     /// 向服务器请求当前AccountId下的所有RoleId
     /// </summary>
@@ -139,6 +142,10 @@ public class SceneSelectRoleController : MonoBehaviour {
         GlobalCache.Instance.Role_CurrentRoleId = mCurrentSelectedRoleId;   //把当前的roleID缓存到全局
     }
 
+    #endregion
+
+    #region 创建角色
+
     /// <summary>
     /// 服务器返回创建角色的消息
     /// </summary>
@@ -160,23 +167,10 @@ public class SceneSelectRoleController : MonoBehaviour {
             Debug.Log("创建角色失败！错误码" + proto.MsgCode);
         }
     }
-    /// <summary>
-    /// 服务器返回进入游戏是否成功消息
-    /// </summary>
-    /// <param name="buffer"></param>
-    private void OnEnterGameServerResp(byte[] buffer)
-    {
-        Account_EnterGameRespProto proto = Account_EnterGameRespProto.GetProto(buffer);
-        if (proto.IsSuccess)
-        {
-            //TODO:成功就真正切换到主城场景
-            Debug.Log("进入游戏成功！");
-        }
-        else
-        {
-            UIDialogController.Instance.Show("进入游戏失败！" + proto.MsgCode);
-        }
-    }
+
+    #endregion
+
+    #region 删除角色
 
     private void OnDeleteRoleServerResp(byte[] buffer)
     {
@@ -197,16 +191,54 @@ public class SceneSelectRoleController : MonoBehaviour {
         }
     }
 
-
-    private void EnterGameReq()
+    /// <summary>
+    /// 删除角色第二步，因需要获取当前role的nickName和OK按钮的委托，故跑到主场景控制器取一波数据
+    /// </summary>
+    private void OnDeleteButtonClick()
     {
+        //Debug.Log("2");
 
-        Account_EnterGameReqProto proto = new Account_EnterGameReqProto();
-        proto.RoleId = mCurrentSelectedRoleId;
-        SocketManager.Instance.SendMessageToLocalServer(proto.ToArray());
+        mUISelectRoleView.DeleteRoleOKClick(GetRoleItem(mCurrentSelectedRoleId).RoleNickName, OnDeleteRoleClickCallback);
     }
 
 
+    /// <summary>
+    /// 删除角色第六步，从这里真正开始删除角色的操作
+    /// </summary>
+    private void OnDeleteRoleClickCallback()
+    {
+        //Debug.Log("6");
+        Debug.Log("开始删除角色！");
+        //TODO: 删除角色的具体实现逻辑
+        Account_DeleteRoleReqProto proto = new Account_DeleteRoleReqProto();
+        proto.RoleId = mCurrentSelectedRoleId;
+        SocketManager.Instance.SendMessageToLocalServer(proto.ToArray());
+
+    }
+
+    #endregion
+
+    #region 选择角色->进入主城
+    /// <summary>
+    /// 服务器返回进入游戏是否成功消息
+    /// </summary>
+    /// <param name="buffer"></param>
+    private void OnEnterGameServerResp(byte[] buffer)
+    {
+        Account_EnterGameRespProto proto = Account_EnterGameRespProto.GetProto(buffer);
+        if (proto.IsSuccess)
+        {
+            //TODO:成功就获取角色信息
+            Debug.Log("进入游戏成功！，开始获取角色信息");
+            Account_RoleInfoReqProto infoProto = new Account_RoleInfoReqProto();
+            infoProto.RoldId = mCurrentSelectedRoleId;
+            SocketManager.Instance.SendMessageToLocalServer(infoProto.ToArray());
+        }
+        else
+        {
+            UIDialogController.Instance.Show("进入游戏失败！" + proto.MsgCode);
+        }
+    }
     /// <summary>
     /// 点击开始游戏的委托执行，做3件事。1、判断当前是否有角色  2、跳转场景进入主城  3、和服务器交互   
     /// </summary>
@@ -240,37 +272,36 @@ public class SceneSelectRoleController : MonoBehaviour {
                 EnterGameReq();
             }
         }
-
-
-
     }
 
-    /// <summary>
-    /// 删除角色第二步，因需要获取当前role的nickName和OK按钮的委托，故跑到主场景控制器取一波数据
-    /// </summary>
-    private void OnDeleteButtonClick()
+    private void EnterGameReq()
     {
-        //Debug.Log("2");
 
-        mUISelectRoleView.DeleteRoleOKClick(GetRoleItem(mCurrentSelectedRoleId).RoleNickName, OnDeleteRoleClickCallback);
-    }
-
-
-    /// <summary>
-    /// 删除角色第六步，从这里真正开始删除角色的操作
-    /// </summary>
-    private void OnDeleteRoleClickCallback()
-    {
-        //Debug.Log("6");
-        Debug.Log("开始删除角色！");
-        //TODO: 删除角色的具体实现逻辑
-        Account_DeleteRoleReqProto proto = new Account_DeleteRoleReqProto();
+        Account_EnterGameReqProto proto = new Account_EnterGameReqProto();
         proto.RoleId = mCurrentSelectedRoleId;
         SocketManager.Instance.SendMessageToLocalServer(proto.ToArray());
-
     }
 
 
+    /// <summary>
+    /// 收到了服务器返回的角色具体属性详情，开始进入主城
+    /// </summary>
+    private void OnGetRoleInfoServerResp(byte[] buffer)
+    {
+        Account_RoleInfoRespProto proto = Account_RoleInfoRespProto.GetProto(buffer);
+        if (proto.IsSuccess)
+        {
+            //TODO:获取到了角色详情，成功进入主城
+            Debug.Log("成功获取角色信息！" + proto.CurrHP);
+            GlobalInit.Instance.myRoleInfo = new PlayerInfo(proto);  //实例化我的角色同时给角色赋值属性详情
+            ScenesManager.Instance.LoadMainScene();
+        }
+        else
+        {
+            UIDialogController.Instance.Show("获取角色信息失败！" + proto.MsgCode);
+        }
+    }
+    #endregion
     #endregion
 
 
@@ -285,22 +316,36 @@ public class SceneSelectRoleController : MonoBehaviour {
         mClassList = ClassDBModel.Instance.GetAllData();
         for (int i = 0; i < mClassList.Count; i++)
         {
-            string path;
-#if SINGLE_MODE && UNITY_EDITOR
-            path = string.Format("Android/download/prefab/roleprefab/player/{0}.assetbundle", mClassList[i].PrefabName);
-#elif SINGLE_MODE && UNITY_ANDROID
-            path = string.Format(@"/download\prefab\roleprefab\player\{0}.assetbundle", mClassList[i].PrefabName);
-#endif
+            string path = null;
+            string tempPath = null;
+            GetCurrentModePath(ref tempPath);
+            Debug.Log("using path:" + tempPath);
+            path = string.Format(tempPath, mClassList[i].PrefabName);
+#if LOCAL_LOAD_MODE
+            GameObject obj=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
+#else
             //把class.xls里的职业全部读出，并在assetbundle下找到对应的prefab加载
             GameObject obj = AssetBundleManager.Instance.LoadAB(path, mClassList[i].PrefabName);
+#endif
+
             if (obj != null)
             {
-                mClassDic.Add(mClassList[i].Id, obj);
+                GlobalInit.Instance.mClassDic.Add(mClassList[i].Id, obj);
+                //mClassDic.Add(mClassList[i].Id, obj);
             }
         }
     }
 
-
+    private void GetCurrentModePath(ref string tempPath)
+    {
+#if LOCAL_LOAD_MODE && UNITY_EDITOR
+        tempPath = "Assets/Download/Prefab/RolePrefab/Player/{0}.prefab";
+#elif UNITY_EDITOR
+        tempPath = "Android/download/prefab/roleprefab/player/{0}.assetbundle";
+#elif UNITY_ANDROID
+        tempPath = @"/download\prefab\roleprefab\player\{0}.assetbundle";
+#endif
+    }
     /// <summary>
     /// 通用：设置3个台柱子是否显示
     /// </summary>
@@ -316,10 +361,10 @@ public class SceneSelectRoleController : MonoBehaviour {
         }
     }
 
-    #endregion
+#endregion
 
 
-    #region 创建角色
+#region 创建角色
 
 
     [SerializeField]
@@ -349,7 +394,7 @@ public class SceneSelectRoleController : MonoBehaviour {
         if (CreateRoleContainers == null && CreateRoleContainers.Length < 4) return;
         for (int i = 0; i < mClassList.Count; i++)
         {
-            GameObject roleObj = Instantiate(mClassDic[mClassList[i].Id]);
+            GameObject roleObj = Instantiate(GlobalInit.Instance.mClassDic[mClassList[i].Id]);
             roleObj.transform.parent = CreateRoleContainers[i];
             roleObj.transform.localScale = Vector3.one;
             roleObj.transform.localPosition = Vector3.zero;
@@ -416,9 +461,9 @@ public class SceneSelectRoleController : MonoBehaviour {
     }
 
 
-    #endregion
+#endregion
 
-    #region 选择角色
+#region 选择角色
     /// <summary>
     /// 选择角色：从roleitemList里取出所有我已有的角色信息，条件是roleID符合传入的id
     /// </summary>
@@ -453,7 +498,7 @@ public class SceneSelectRoleController : MonoBehaviour {
     //选择角色：
     private void CloneMyRole(Account_LoginGameServerRespProto.RoleItem roleItem)
     {
-        GameObject roleObj = Instantiate(mClassDic[roleItem.RoleClass]);
+        GameObject roleObj = Instantiate(GlobalInit.Instance.mClassDic[roleItem.RoleClass]);
         roleObj.transform.parent = CreateRoleContainers[0]; //加载已有角色时默认使用第一个台柱子
         roleObj.transform.localScale = Vector3.one;
         roleObj.transform.localPosition = Vector3.zero;
@@ -462,9 +507,9 @@ public class SceneSelectRoleController : MonoBehaviour {
     }
 
 
-    #endregion
+#endregion
 
-    #region 删除角色
+#region 删除角色
     /// <summary>
     /// 点击删除角色按钮后，场景里把prefab删除
     /// </summary>
@@ -474,9 +519,9 @@ public class SceneSelectRoleController : MonoBehaviour {
         Destroy(roleObj);
     }
 
-    #endregion
+#endregion
 
-    #endregion
+#endregion
 
 
     // Update is called once per frame
@@ -506,6 +551,8 @@ public class SceneSelectRoleController : MonoBehaviour {
         SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_EnterGameRespProto, OnEnterGameServerResp);
 
         SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_DeleteRoleRespProto, OnDeleteRoleServerResp);
+
+        SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_RoleInfoRespProto, OnGetRoleInfoServerResp);
 
     }
 }

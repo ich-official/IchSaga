@@ -33,7 +33,28 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
 
         //客户端发送进入游戏消息
         SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_EnterGameReqProto, OnEnterGame);
+
+        //客户端发送获取角色详情消息
+        SocketDispatcher.Instance.AddEventListener(ProtoCodeDefine.Account_RoleInfoReqProto, OnGetRoleInfo);
+
         #endregion
+    }
+    #region req
+
+    /// <summary>
+    /// 登陆时服务器的操作
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="buffer"></param>
+    private void OnLoginGameServer(byte[] buffer)
+    {
+        Account_LoginGameServerReqProto proto = Account_LoginGameServerReqProto.GetProto(buffer);
+
+        //玩家帐号
+        int accountId = proto.AccountId;
+        int gameServerId = proto.GameServerId;
+        //role.AccountId = accountId;
+        LoginGameServerResp(accountId, gameServerId);
     }
 
     private void OnEnterGame( byte[] buffer)
@@ -62,22 +83,17 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
         AddRoleServerResp(classId, nickName, gameServerId);
     }
 
-
-    /// <summary>
-    /// 登陆时服务器的操作
-    /// </summary>
-    /// <param name="role"></param>
-    /// <param name="buffer"></param>
-    private void OnLoginGameServer(byte[] buffer)
+    private void OnGetRoleInfo(byte[] buffer)
     {
-        Account_LoginGameServerReqProto proto = Account_LoginGameServerReqProto.GetProto(buffer);
-
-        //玩家帐号
-        int accountId = proto.AccountId;
-        int gameServerId = proto.GameServerId;
-        //role.AccountId = accountId;
-        LoginGameServerResp(accountId,gameServerId);
+        Account_RoleInfoReqProto proto = Account_RoleInfoReqProto.GetProto(buffer);
+        int roleId = proto.RoldId;
+        GetRoleInfoResp(roleId);
     }
+
+    #endregion
+
+
+    #region resp
     /// <summary>
     /// 服务器操作，把客户端传来的accountID查询对应的RoleID，并把这个role对象返回给客户端
     /// 20.07.10Ich新增区服判断
@@ -158,7 +174,61 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
         if (isSuccess == false) proto.MsgCode = Constant.ENTER_GAME_FAIL;
         SocketManagerServer.Instance.SendMessageToClient(proto.ToArray());
     }
-
+    private void GetRoleInfoResp(int roleId)
+    {
+        Account_RoleInfoRespProto proto = new Account_RoleInfoRespProto();
+        Dictionary<string, string> result = new Dictionary<string, string>();
+        result=RoleDBModelServer.Instance.GetRoleInfo(roleId);
+        if (result == null)
+        {
+            proto.IsSuccess = false;
+            proto.MsgCode = Constant.ROLE_GET_ROLEINFO_FAIL;
+        }
+        else
+        {
+            #region 角色属性详情
+            proto.IsSuccess = true;
+            proto.Attack = int.Parse(result["Attack"]);
+            proto.Cri = int.Parse(result["Cri"]);
+            proto.CurrHP = int.Parse(result["CurrHP"]);
+            proto.CurrMP = int.Parse(result["CurrMP"]);
+            proto.Defense = int.Parse(result["Defense"]);
+            proto.Dodge= int.Parse(result["Dodge"]);
+            proto.Equip_Belt = int.Parse(result["Equip_BeltId"]);
+            //proto.Equip_BeltTableId= int.Parse(result["Equip_BeltTableId"]);
+            proto.Equip_Clothes= int.Parse(result["Equip_ClothesId"]);
+            //proto.Equip_ClothesTableId= int.Parse(result["Equip_ClothesTableId"]);
+            proto.Equip_Cuff= int.Parse(result["Equip_CuffId"]);
+            //proto.Equip_CuffTableId= int.Parse(result["Equip_CuffTableId"]);
+            proto.Equip_Necklace= int.Parse(result["Equip_NecklaceId"]);
+            //proto.Equip_NecklaceTableId = int.Parse(result["Equip_NecklaceTableId"]);
+            proto.Equip_Pants = int.Parse(result["Equip_PantsId"]);
+            //proto.Equip_PantsTableId = int.Parse(result["Equip_PantsTableId"]);
+            proto.Equip_Ring = int.Parse(result["Equip_RingsId"]);
+            //proto.Equip_RingTableId = int.Parse(result["Equip_RingTableId"]);
+            proto.Equip_Shoe = int.Parse(result["Equip_ShoesId"]);
+            //proto.Equip_ShoeTableId = int.Parse(result["Equip_ShoeTableId"]);
+            proto.Equip_Weapon = int.Parse(result["Equip_WeaponId"]);
+            //proto.Equip_WeaponTableId = int.Parse(result["Equip_WeaponTableId"]);
+            proto.Exp = int.Parse(result["Exp"]);
+            proto.Gold = int.Parse(result["Gold"]);
+            proto.Hit = int.Parse(result["Hit"]);
+            proto.LastInWorldMapId = int.Parse(result["LastInWorldMapId"]);
+            proto.LastInWorldMapPos = result["LastInWorldMapPos"];
+            proto.Level = int.Parse(result["Level"]);
+            proto.MaxHP = int.Parse(result["MaxHP"]);
+            proto.MaxMP = int.Parse(result["MaxMP"]);
+            proto.Gem = int.Parse(result["Gem"]);
+            proto.Res = int.Parse(result["Res"]);
+            proto.RoleNickName = result["NickName"];
+            proto.SumDPS = int.Parse(result["SumDPS"]);
+            proto.RoldId = int.Parse(result["Id"]);
+            proto.TotalRechargeGem = int.Parse(result["TotalRechargeGem"]);
+            #endregion
+        }
+        SocketManagerServer.Instance.SendMessageToClient(proto.ToArray());
+    }
+    #endregion
     public void MyDispose()
     {
 
@@ -170,6 +240,9 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
         SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_DeleteRoleReqProto, OnDeleteRole);
 
         SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_EnterGameReqProto, OnEnterGame);
+
+        SocketDispatcher.Instance.RemoveEventListener(ProtoCodeDefine.Account_RoleInfoReqProto, OnGetRoleInfo);
+
         #endregion
 
     }

@@ -51,6 +51,7 @@ public class Constant  {
     public const int ROLE_ADD_FAIL = 4001;  //创建角色失败，原因：1、昵称已存在 2、昵称违规
     public const int ENTER_GAME_FAIL = 4002;    //进入游戏失败，暂时未定义原因
     public const int ROLE_DELETE_FAIL = 4003;   //删除角色失败，原因：未找到对应的角色ID
+    public const int ROLE_GET_ROLEINFO_FAIL = 4004;     //查询角色详情失败，原因：未找到对应的角色ID
     #endregion
 
 

@@ -17,7 +17,7 @@ public class SceneStartGameController : MonoBehaviour {
   
     void Start()
     {
-#if DISABLE_AB  //调试模式
+#if LOCAL_LOAD_MODE  //本地加载模式
         StartCoroutine(LoadLoginScene()); //禁用AB时为本地调试模式，把Download下场景都开启
         DownloadManager.Instance.CopyDBToPersist();
         //DownloadManager.Instance.InitStreamingAsset(OnInitComplete);

@@ -22,6 +22,8 @@ public class SceneLoadingController : MonoBehaviour
     public Leo_UISceneLoadingController mLoadingController;
     private AsyncOperation mAO = null;
     private int mCurrentProcessValue = 0;
+    private AssetBundleCreateRequest request;
+    private AssetBundle bundle;
 
     void Start()
     {
@@ -44,6 +46,7 @@ public class SceneLoadingController : MonoBehaviour
     /// </summary>
     public void OnSceneLoadDone()
     {
+        Debug.Log("mLoadingController:"+mLoadingController);
         if (mLoadingController != null)
         {
             Destroy(mLoadingController.gameObject);
@@ -58,7 +61,8 @@ public class SceneLoadingController : MonoBehaviour
                 sceneName = "Login5x";
                 break;
             case SceneName.MAINSCENE5X:
-                sceneName = "Main5x";
+                //sceneName = "Main5x";
+                sceneName = "MainScene";
                 break;
             case SceneName.SELECT_ROLE:
                 sceneName = "Scene_SelectRole";
@@ -68,7 +72,7 @@ public class SceneLoadingController : MonoBehaviour
         if (ScenesManager.Instance.currentSceneName.Equals(SceneName.SELECT_ROLE) || ScenesManager.Instance.currentSceneName.Equals(SceneName.MAINSCENE5X))
         {
             //string tempPath = Application.persistentDataPath + @"/download\scene\initscene\scene_selectrole.unity3d";
-            StartCoroutine(Load(string.Format("Download/Scene/CommonScene/{0}.unity3d", sceneName),sceneName));
+            StartCoroutine(Load(string.Format("Download/Scene/InitScene/{0}.unity3d", sceneName),sceneName));
 #if UNITY_IOS  //开发阶段暂时不用AB加载
             mAO = Application.LoadLevelAsync(sceneName);
             //是否加载完立即进入场景（true:是  false:否，手动控制进入场景）
@@ -134,22 +138,33 @@ public class SceneLoadingController : MonoBehaviour
     
     private IEnumerator Load(string path, string strSceneName)
     {
-#if DISABLE_AB
+#if LOCAL_LOAD_MODE
         yield return null;
         path = path.Replace(".unity3d", "");
         mAO = Application.LoadLevelAsync(strSceneName);
         //是否加载完立即进入场景（true:是  false:否，手动控制进入场景）
         mAO.allowSceneActivation = false;
 
-
 #else
         yield return null;
-        AssetBundleManager.Instance.LoadABAsync(path, strSceneName).OnABLoadComplete = (Object obj) => {
+        string fullPath = LocalFileManager.Instance.localFilePath + "Android/" +path;
+        //这是新方法，解决OnComplete报错问题
+        byte[] buffer = LocalFileManager.Instance.GetBuffer(fullPath);
+        request=AssetBundle.LoadFromMemoryAsync(buffer);
+        yield return request;
+        bundle = request.assetBundle;
+        mAO = SceneManager.LoadSceneAsync(strSceneName, LoadSceneMode.Additive);
+        mAO.allowSceneActivation = false;
+
+        /*
+        AssetBundleManager.Instance.LoadABAsync("Android/"+path, strSceneName).OnABLoadComplete = (Object obj) => {
             //mAO = Application.LoadLevelAsync(sceneName);
             mAO = SceneManager.LoadSceneAsync(strSceneName, LoadSceneMode.Additive);
             //是否加载完立即进入场景（true:是  false:否，手动控制进入场景）
             mAO.allowSceneActivation = false;
         };
+        */
+        
 #endif
     }
 

@@ -11,9 +11,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 /// <summary>
 /// 角色控制器，控制摄像机跟随、移动、战斗参数等，还有显示头上血条等
 /// </summary>
+[RequireComponent(typeof(Seeker))]
+[RequireComponent(typeof(FunnelModifier))]
 public class RoleController : RoleControllerBase{
 
     Ray ray;
@@ -87,9 +90,22 @@ public class RoleController : RoleControllerBase{
 
     public System.Action<RoleController> OnRoleDie;
 
+    #region 寻路相关变量
+    private Seeker mSeeker; //寻路核心组件
+    [HideInInspector]
+    public ABPath astarPath;    //走到目标位置的一条路径
+    [HideInInspector]
+    public int astarCurrentNodeIndex = 1;  //当前要去的目标位置，以关键节点计数，0是玩家的位置，1是最近一个要移动的位置，=AStarCurrWayPointIndex
 
-	void Start () {
+    #endregion
+
+
+
+
+
+    void Start () {
         CharacterController = GetComponent<CharacterController>();
+        mSeeker = GetComponent<Seeker>();   //上方已定义RequireComponent，此处一定可找到
         if (currentRoleType == RoleType.PLAYER)
         {
             CameraController.Instance.InitData();
@@ -270,14 +286,40 @@ public class RoleController : RoleControllerBase{
     }
     public void ToFight()
     {
-        currentPlayerFSM.ChangeState(RoleState.Fight);
+        currentPlayerFSM.ChangeState(RoleState.Fight);   //现代版暂时如此修改
     }
-    //MoveTo方法
+
+    //MoveTo方法，引入寻路project后改造算法20.07.17
     public void ToRun(Vector3 target)
     {
         //if (targetPos == Vector3.zero) return;
         targetPos = target;
-        currentPlayerFSM.ChangeState(RoleState.Run);
+        //currentPlayerFSM.ChangeState(RoleState.Run);
+
+        //使用A*计算路径
+        mSeeker.StartPath(transform.position, target,(Path p)=>{
+            if (!p.error)
+            {
+                //TODO:路径计算无问题
+                astarPath = (ABPath)p;
+                if(Vector3.Distance(astarPath.endPoint,new Vector3(astarPath.originalEndPoint.x, astarPath.endPoint.y, astarPath.originalEndPoint.z)) > 0.5f)
+                {
+                    //如果寻路的终点和寻路的endpoint>0.5f
+                    //endPoint：玩家指定的目标点，该点可能无法到达
+                    //originalEndPoint：A*算法算出距离目标点最近的一个位置，最好情况是originalEndPoint=endPoint
+                    Debug.Log("不能到达目标点");
+                    astarPath = null;
+                }
+                astarCurrentNodeIndex = 1;
+                currentPlayerFSM.ChangeState(RoleState.Run);
+            }
+            else
+            {
+                //TODO：路径计算有问题
+                Debug.Log("寻路错误!");
+                astarPath = null;
+            }
+        });  //以角色自身作为起始点，以target作为结束点，外加一个匿名委托作为回调
     }
     public void ToAttack()
     {

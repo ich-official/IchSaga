@@ -34,16 +34,18 @@ public class SceneMainController : MonoBehaviour {
 
     void Start()
     {
-        //Clone player
+        #region Old 早期克隆role prefab方式，现在弃用
+        /*
+        //Clone player，
         GameObject obj = null;
         obj = RoleManager.Instance.LoadRole("RoleModel_Cike");
-        obj.transform.position = playerSpawnPoint.position;
+        //obj.transform.position = playerSpawnPoint.position;
         //找到当前player
         GlobalInit.Instance.currentPlayer = obj.GetComponent<RoleController>();
 #if UNITY_EDITOR
         if (GlobalInit.Instance.currentPlayerUsername == "" || GlobalInit.Instance.currentPlayerUsername == null)
         {
-            GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = "绫祈丿er",currentHP=500,maxHP=500 }, new PlayerAI_Battle(obj.GetComponent<RoleController>()));
+            GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = "绫祈丿er", currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<RoleController>()));
         }
         else
         {
@@ -52,8 +54,16 @@ public class SceneMainController : MonoBehaviour {
 #else
         GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, new RoleInfoBase() { username = GlobalInit.Instance.currentPlayerUsername, currentHP = 500, maxHP = 500 }, new PlayerAI_Battle(obj.GetComponent<RoleController>()));
 #endif
+        */
+        #endregion
 
-        Leo_UIPlayerInfo.Instance.SetPlayerInfo();
+        RoleManager.Instance.InitMyRole();  //现代版克隆角色方式
+        if (GlobalInit.Instance.currentPlayer != null)
+        {
+            GlobalInit.Instance.currentPlayer.gameObject.transform.localPosition = playerSpawnPoint.position;
+        }
+
+        //Leo_UIPlayerInfo.Instance.SetPlayerInfo();
 
         //46课以后异步累加加载后，判断后一个场景是否加载完毕
         if (DelegateDefine.Instance.OnSceneLoadDone != null)
@@ -81,7 +91,7 @@ public class SceneMainController : MonoBehaviour {
         {
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.gameObject.tag == "Plane")
+                if (hit.collider.gameObject.tag == "Road")
                 {
                     if (GlobalInit.Instance.currentPlayer != null)
                     {

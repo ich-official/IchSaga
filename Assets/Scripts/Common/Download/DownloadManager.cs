@@ -20,7 +20,7 @@ public class DownloadManager : SingletonBase<DownloadManager> {
     public const int DownloadTimeOut = 5; //超时时间
 
     public const int DownloadRoutineNum = 1; //下载器的数量，模拟多线程
-#if DISABLE_AB  //编辑器调试模式
+#if LOCAL_LOAD_MODE ||UNITY_EDITOR //编辑器调试模式
     public static string DownloadBaseUrl = @"H:\IchSagaGit\IchSaga\AssetBundles\"; //服务器上文件的路径 downloadAPI的基础地址，本项目使用本地路径进行模拟（把资源预先放进手机，从服务器下载改为从手机指定路径加载）
 
 #else   //真机模式

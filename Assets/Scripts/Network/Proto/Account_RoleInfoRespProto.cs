@@ -21,10 +21,10 @@ public struct Account_RoleInfoRespProto : IProto
     public int MsgCode; //消息码
     public int RoldId; //角色编号
     public string RoleNickName; //角色昵称
-    public byte JobId; //职业编号
+    public byte ClassId; //职业编号
     public int Level; //等级
-    public int TotalRechargeMoney; //总充值金额
-    public int Money; //元宝
+    public int TotalRechargeGem; //总充值金额
+    public int Gem; //元宝
     public int Gold; //金币
     public int Exp; //经验
     public int MaxHP; //最大HP
@@ -37,7 +37,7 @@ public struct Account_RoleInfoRespProto : IProto
     public int Dodge; //闪避
     public int Cri; //暴击
     public int Res; //抗性
-    public int Fighting; //综合战斗力
+    public int SumDPS; //综合战斗力
     public int LastInWorldMapId; //最后进入的世界地图编号
     public string LastInWorldMapPos; //最后进入的世界地图坐标
     public int Equip_Weapon; //穿戴武器
@@ -67,10 +67,10 @@ public struct Account_RoleInfoRespProto : IProto
             {
                 ms.WriteInt(RoldId);
                 ms.WriteUTF8String(RoleNickName);
-                ms.WriteByte(JobId);
+                ms.WriteByte(ClassId);
                 ms.WriteInt(Level);
-                ms.WriteInt(TotalRechargeMoney);
-                ms.WriteInt(Money);
+                ms.WriteInt(TotalRechargeGem);
+                ms.WriteInt(Gem);
                 ms.WriteInt(Gold);
                 ms.WriteInt(Exp);
                 ms.WriteInt(MaxHP);
@@ -83,7 +83,7 @@ public struct Account_RoleInfoRespProto : IProto
                 ms.WriteInt(Dodge);
                 ms.WriteInt(Cri);
                 ms.WriteInt(Res);
-                ms.WriteInt(Fighting);
+                ms.WriteInt(SumDPS);
                 ms.WriteInt(LastInWorldMapId);
                 ms.WriteUTF8String(LastInWorldMapPos);
                 ms.WriteInt(Equip_Weapon);
@@ -121,10 +121,10 @@ public struct Account_RoleInfoRespProto : IProto
             {
                 proto.RoldId = ms.ReadInt();
                 proto.RoleNickName = ms.ReadUTF8String();
-                proto.JobId = (byte)ms.ReadByte();
+                proto.ClassId = (byte)ms.ReadByte();
                 proto.Level = ms.ReadInt();
-                proto.TotalRechargeMoney = ms.ReadInt();
-                proto.Money = ms.ReadInt();
+                proto.TotalRechargeGem = ms.ReadInt();
+                proto.Gem = ms.ReadInt();
                 proto.Gold = ms.ReadInt();
                 proto.Exp = ms.ReadInt();
                 proto.MaxHP = ms.ReadInt();
@@ -137,7 +137,7 @@ public struct Account_RoleInfoRespProto : IProto
                 proto.Dodge = ms.ReadInt();
                 proto.Cri = ms.ReadInt();
                 proto.Res = ms.ReadInt();
-                proto.Fighting = ms.ReadInt();
+                proto.SumDPS = ms.ReadInt();
                 proto.LastInWorldMapId = ms.ReadInt();
                 proto.LastInWorldMapPos = ms.ReadUTF8String();
                 proto.Equip_Weapon = ms.ReadInt();

@@ -4,6 +4,8 @@ This is an independent game, developed by Ich(myself), using Unity3D.
 If you have some great ideas about this game, send e-mail to ich_official@163.com and tell me. I'm glad to hear your advice lol.
 
 ## Update log
+### 2020.07.31
+  Add auto path-finding module.
 ### 2020.07.12
   Complete logic of channel,server and account, complete role module and functions.
 ### 2020.06.21
@@ -27,6 +29,8 @@ If you have some great ideas about this game, send e-mail to ich_official@163.co
 如果你想出了很棒的游戏玩法，欢迎发邮件告诉我：ich_official@163.com，我随时恭候233.
 
 ## 更新日志
+### 2020.07.31
+  增加了自动寻路功能
 ### 2020.07.12
   完善了渠道、区服、账号之间的逻辑，新增角色模块功能
 ### 2020.06.21

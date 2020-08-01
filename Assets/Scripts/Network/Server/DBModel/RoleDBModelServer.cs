@@ -127,5 +127,17 @@ public class RoleDBModelServer : DBModelServerBase
         return results;
     }
 
+    /// <summary>
+    /// 根据roleId查询该角色的属性详情
+    /// </summary>
+    /// <param name="roleId"></param>
+    public Dictionary<string,string> GetRoleInfo(int roleId)
+    {
+        Dictionary<string, string> conditions = new Dictionary<string, string>();
+        Dictionary<string, string> result = new Dictionary<string, string>();
+        conditions.Add("Id", roleId.ToString());
+        result=XMLHelper.Instance.QueryOne("Role.xml", "Role", conditions);
+        return result;
+    }
     #endregion
 }

@@ -111,6 +111,7 @@ public enum RoleAniChangeCondition
     ToAttack,
     ToHurt,
     ToDie,
+    ToIdleFight,
     CurrentState
 }
 #endregion
