@@ -1,24 +1,27 @@
-ï»¿//-----------------------------------------------------------
+//-----------------------------------------------------------
 //	Author: Ich
-//  CreateTime: 2020-04-25 14:55:17
+//  CreateTime: 2020-08-08 15:06:48
 //  Version: 1.0.0
 //  ProjectURL: https://github.com/ich-official/IchSaga
 //  Contact_Me: ich_official@163.com
 //	
 //-----------------------------------------------------------
 
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 /// <summary>
-/// è§’è‰²æŽ§åˆ¶å™¨åŸºç±»
+/// NPCµÄ¸÷ÏîÐÅÏ¢
 /// </summary>
-public class RoleControllerBase : MonoBehaviour {
+public class NPCInfo : RoleInfoBase {
 
+	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
+	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 }

@@ -24,7 +24,7 @@ public class AssetBundleManager : SingletonBase<AssetBundleManager>
         AssetBundleLoader loader = new AssetBundleLoader(shortPath);
         GameObject obj = loader.LoadAssetBundle<GameObject>(ABName);
         return obj;
-#if DISABLE_AB
+#if LOCAL_LOAD_MODE
 
 #else
 

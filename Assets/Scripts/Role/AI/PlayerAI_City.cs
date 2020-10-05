@@ -14,7 +14,7 @@ using System.Collections;
 /// </summary>
 public class PlayerAI_City : MonoBehaviour,IRoleAI {
 
-    public RoleController CurrentRole
+    public RoleBehaviour CurrentRole
     {
         get;
         set;
@@ -25,7 +25,7 @@ public class PlayerAI_City : MonoBehaviour,IRoleAI {
        
     }
 
-    public PlayerAI_City(RoleController controller)
+    public PlayerAI_City(RoleBehaviour controller)
     {
         CurrentRole = controller;
     }

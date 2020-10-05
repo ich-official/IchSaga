@@ -35,11 +35,14 @@ public class SceneLoadingController : MonoBehaviour
         mLoadingController.SetProgressValue(0);
         //46课异步累加加载后，要监听一个加载完毕的委托
         DelegateDefine.Instance.OnSceneLoadDone += OnSceneLoadDone;
+        //每当重新加载一个新场景时，把老场景里已经开启的panel全部关闭
+        UIViewManagerNGUI.Instance.CloseAllPanels();
     }
 
     void OnDestroy()
     {
         DelegateDefine.Instance.OnSceneLoadDone -= OnSceneLoadDone;
+        mAO = null;
     }
     /// <summary>
     /// 下一个场景完全加载完毕后，这个loading过场就销毁自己
@@ -50,6 +53,7 @@ public class SceneLoadingController : MonoBehaviour
         if (mLoadingController != null)
         {
             Destroy(mLoadingController.gameObject);
+            Destroy(gameObject);
         }
     }
     private IEnumerator LoadingSceneAsync()
@@ -72,7 +76,7 @@ public class SceneLoadingController : MonoBehaviour
         if (ScenesManager.Instance.currentSceneName.Equals(SceneName.SELECT_ROLE) || ScenesManager.Instance.currentSceneName.Equals(SceneName.MAINSCENE5X))
         {
             //string tempPath = Application.persistentDataPath + @"/download\scene\initscene\scene_selectrole.unity3d";
-            StartCoroutine(Load(string.Format("Download/Scene/InitScene/{0}.unity3d", sceneName),sceneName));
+            StartCoroutine(Load(string.Format(Constant.AB_InitScene, sceneName),sceneName));
 #if UNITY_IOS  //开发阶段暂时不用AB加载
             mAO = Application.LoadLevelAsync(sceneName);
             //是否加载完立即进入场景（true:是  false:否，手动控制进入场景）
@@ -127,7 +131,9 @@ public class SceneLoadingController : MonoBehaviour
         }
         else
         {
-            mAO = Application.LoadLevelAsync(sceneName);
+            //mAO = Application.LoadLevelAsync(sceneName);
+            //使用异步累加加载，编辑器测试已通过
+            mAO = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             //是否加载完立即进入场景（true:是  false:否，手动控制进入场景）
             mAO.allowSceneActivation = false;
             yield return mAO;
@@ -141,13 +147,21 @@ public class SceneLoadingController : MonoBehaviour
 #if LOCAL_LOAD_MODE
         yield return null;
         path = path.Replace(".unity3d", "");
-        mAO = Application.LoadLevelAsync(strSceneName);
+        //mAO = Application.LoadLevelAsync(strSceneName);  //老式异步弃用，使用新累加加载
+        mAO = SceneManager.LoadSceneAsync(strSceneName, LoadSceneMode.Additive);
         //是否加载完立即进入场景（true:是  false:否，手动控制进入场景）
         mAO.allowSceneActivation = false;
 
 #else
         yield return null;
-        string fullPath = LocalFileManager.Instance.localFilePath + "Android/" +path;
+
+#if UNITY_EDITOR && !LOCAL_LOAD_MODE
+        string fullPath = Constant.AB_localFilePath + "Android/" +path;
+#else
+        string fullPath = Constant.AB_localFilePath + path;   //甄姬测试后修正路径
+#endif
+
+      
         //这是新方法，解决OnComplete报错问题
         byte[] buffer = LocalFileManager.Instance.GetBuffer(fullPath);
         request=AssetBundle.LoadFromMemoryAsync(buffer);

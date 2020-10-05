@@ -30,7 +30,7 @@ public class UIPanelViewBase :UIViewBase {
     /// <summary>
     /// 下一个要打开的UI类型
     /// </summary>
-    private UIWindowType mNextOpenUIType;
+    private UIPanelType mNextOpenUIType;
 
     /// <summary>
     /// 是否打开下一个窗口
@@ -40,7 +40,7 @@ public class UIPanelViewBase :UIViewBase {
     /// 销毁窗口时不知道要销毁哪个窗口，在这里存一下窗口类型，以便告知destroy哪个
     /// </summary>
     [HideInInspector]
-    public UIWindowType currentUIType;
+    public UIPanelType currentUIType;
 
     /// <summary>
     /// 点击按钮时，下一个要打开哪个窗口？记录在这个变量中
@@ -66,9 +66,9 @@ public class UIPanelViewBase :UIViewBase {
     public virtual void SelfClose()
     {
        // isOpenNext = OpenNext;
-        Leo_UIWindowManager.Instance.CloseWindowUI(currentUIType);
+        UIViewManagerNGUI.Instance.CloseWindowUI(currentUIType);
     }
-    public virtual void SelfCloseAndOpenNext(UIWindowType next)
+    public virtual void SelfCloseAndOpenNext(UIPanelType next)
     {
         SelfClose();
         mNextOpenUIType = next;
@@ -84,9 +84,9 @@ public class UIPanelViewBase :UIViewBase {
        // {
         //    if (OnViewClose != null) OnViewClose();
        // }
-        if ( mNextOpenUIType != UIWindowType.NONE )   //需要打开下一个UI
+        if ( mNextOpenUIType != UIPanelType.NONE )   //需要打开下一个UI
         {
-            Leo_UIWindowManager.Instance.OpenWindowUI(mNextOpenUIType);
+            UIViewManagerNGUI.Instance.OpenWindowUI(mNextOpenUIType);
         }        
         
         base.BeforeOnDestroy();

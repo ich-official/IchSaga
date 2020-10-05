@@ -34,7 +34,7 @@ public class Leo_UIWindowLoginController : Leo_UIWindowBase {
         //Destroy(this.gameObject);
         //Leo_WindowUIManager.Instance.CloseWindowUI(Leo_WindowUIType.LOGIN);//把关闭自身的方法提取到父类中，使用下面的方法更简便
         this.SelfClose();
-        mNextWindow = UIWindowType.REG;
+        mNextWindow = UIPanelType.REG;
        // obj.transform.parent = GameObject.Find("Container_Center").transform;//temp,different from video
        // obj.transform.localPosition = Vector3.zero;
        // obj.transform.localScale = Vector3.one;

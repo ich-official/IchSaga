@@ -21,7 +21,8 @@ public class AssetBundleLoader : IDisposable{
     /// <param name="shortPath">Application.dataPath + "/../" + "AssetBundles/省去这段以外的部分叫做短路径</param>
     public AssetBundleLoader(string shortPath)
     {
-        string fullPath = LocalFileManager.Instance.localFilePath + shortPath;
+        //string fullPath = LocalFileManager.Instance.localFilePath + shortPath;
+        string fullPath = Constant.AB_localFilePath + shortPath;
 
         //1.从路径获取AB资源文件，并转成byte数组
         byte[] buffer = LocalFileManager.Instance.GetBuffer(fullPath);

@@ -13,14 +13,14 @@ using System.Collections;
 /// 玩家战斗AI，可以用于挂机
 /// </summary>
 public class PlayerAI_Battle : MonoBehaviour, IRoleAI{
-    public RoleController CurrentRole
+    public RoleBehaviour CurrentRole
     {
         get;
         set;
     }
 
     private float mNextAttackTime = 0; //下次攻击时间
-    public PlayerAI_Battle(RoleController controller)
+    public PlayerAI_Battle(RoleBehaviour controller)
     {
         CurrentRole = controller;
     }

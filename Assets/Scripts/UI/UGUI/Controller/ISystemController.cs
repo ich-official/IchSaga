@@ -13,5 +13,5 @@ using System.Collections;
 /// 接口，打开一个视图
 /// </summary>
 public interface ISystemController  {
-    void OpenView(UIWindowType windowType);
+    void OpenView(UIPanelType windowType);
 }

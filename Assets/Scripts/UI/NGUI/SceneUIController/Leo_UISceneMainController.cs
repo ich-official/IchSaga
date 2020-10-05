@@ -19,6 +19,6 @@ public class Leo_UISceneMainController : Leo_UISceneBase {
 
     void OpenPlayerInfoPanel()
     {
-        Leo_UIWindowManager.Instance.OpenWindowUI(UIWindowType.PLAYERINFO, true);
+        UIViewManagerNGUI.Instance.OpenWindowUI(UIPanelType.PLAYERINFO, true);
     }
 }

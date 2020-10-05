@@ -161,6 +161,8 @@ public class FingerEvent : MonoBehaviour {
 
     void OnFingerDragMove(int fingerIndex, Vector2 fingerPos, Vector2 delta)
     {
+        if (UIViewManagerNGUI.Instance.OpenedWindowsCount > 0) return;
+
         mDir = fingerPos - mLastFingerPos;
         mPrevFinger = 3;
         if (mDir.y < mDir.x && mDir.y > -mDir.x)

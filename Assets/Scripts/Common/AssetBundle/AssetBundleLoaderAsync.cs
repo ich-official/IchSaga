@@ -30,7 +30,9 @@ public class AssetBundleLoaderAsync : MonoBehaviour {
 
     public void Init(string shortPath, string ABName)
     {
-        mFullPath = LocalFileManager.Instance.localFilePath + shortPath;
+        //mFullPath = LocalFileManager.Instance.localFilePath + shortPath;
+        mFullPath = Constant.AB_localFilePath + shortPath;
+
         mABName = ABName;
     }
 

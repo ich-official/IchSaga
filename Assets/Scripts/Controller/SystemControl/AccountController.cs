@@ -39,14 +39,14 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
     }
     #endregion
     //在UIViewManager里调用此方法，然后在此方法中switch选择具体打开哪个view
-    public void OpenView(UIWindowType windowType)
+    public void OpenView(UIPanelType windowType)
     {
         switch (windowType)
         {
-            case UIWindowType.LOGIN:
+            case UIPanelType.LOGIN:
                 OpenLoginView();
                 break;
-            case UIWindowType.REG:
+            case UIPanelType.REG:
                 OpenRegView();
                 break;
         }
@@ -85,14 +85,14 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
     //打开登陆页面
     public void OpenLoginView()
     {
-        mLoginView = Leo_UIWindowManager.Instance.OpenWindowUI(UIWindowType.LOGIN, true).GetComponent<UIPanelLoginView>();
+        mLoginView = UIViewManagerNGUI.Instance.OpenWindowUI(UIPanelType.LOGIN, true).GetComponent<UIPanelLoginView>();
         //mLoginView.OnViewClose = () => { OpenRegView(); };
     
     }
     //打开注册页面
     public void OpenRegView()
     {
-        mRegView = Leo_UIWindowManager.Instance.OpenWindowUI(UIWindowType.REG, true).GetComponent<UIPanelRegView>();
+        mRegView = UIViewManagerNGUI.Instance.OpenWindowUI(UIPanelType.REG, true).GetComponent<UIPanelRegView>();
         //mRegView.OnViewClose = () => { OpenLoginView(); };
     }
 
@@ -150,7 +150,7 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
             {
                 StatUtil.Login(entity.Id, PlayerPrefs.GetString(Constant.QuickLoginUsername));//统计系统上报登录行为
 
-                GameServerController.Instance.OpenView(UIWindowType.EnterServer);   //这种打开方式可以加载GameServerController上的委托
+                GameServerController.Instance.OpenView(UIPanelType.EnterServer);   //这种打开方式可以加载GameServerController上的委托
 
             }
             else
@@ -161,7 +161,7 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
                 StatUtil.Login(entity.Id, mLoginView.Username.text);//统计系统上报登录行为
                 //mLoginView.SelfCloseAndOpenNext(UIWindowType.EnterServer);  //这种方式不能加载GameServerController上的委托
                 mLoginView.SelfClose();
-                GameServerController.Instance.OpenView(UIWindowType.EnterServer); 
+                GameServerController.Instance.OpenView(UIPanelType.EnterServer); 
             }
 
             //SceneManager.Instance.LoadMainScene();   
@@ -174,6 +174,8 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
     {
         Debug.Log("gotoReg Click");
         mLoginView.SelfClose();
+        mRegView = UIViewManagerNGUI.Instance.OpenWindowUI(UIPanelType.REG).GetComponent<UIPanelRegView>();
+
 
     }
     //执行注册，把账号传回服务器保存
@@ -221,7 +223,7 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
 
             //mRegView.SelfCloseAndOpenNext(UIWindowType.EnterServer);
             mRegView.SelfClose();
-            GameServerController.Instance.OpenView(UIWindowType.EnterServer);
+            GameServerController.Instance.OpenView(UIPanelType.EnterServer);
         }
     }
 
@@ -230,7 +232,7 @@ public class AccountController : ControllerBase<AccountController>, ISystemContr
     {
         Debug.Log("reg return");
         mRegView.SelfClose();
-        mLoginView = Leo_UIWindowManager.Instance.OpenWindowUI(UIWindowType.LOGIN).GetComponent<UIPanelLoginView>();
+        mLoginView = UIViewManagerNGUI.Instance.OpenWindowUI(UIPanelType.LOGIN).GetComponent<UIPanelLoginView>();
 
 
     }

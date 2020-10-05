@@ -9,10 +9,11 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
-//原名CitySceneCtrl
+
 /// <summary>
-/// 大厅场景的主控制器
+/// 大厅场景的主控制器//=CitySceneCtrl,=WorldMapSceneCtrl
 /// </summary>
 public class SceneMainController : MonoBehaviour {
 
@@ -20,9 +21,14 @@ public class SceneMainController : MonoBehaviour {
     private RaycastHit hit;
 
     public Transform playerSpawnPoint;
+
+    private UIRootMainCityView mMainCityView;
+
+    [SerializeField]
+    private GameObject[] NPCList;
     void Awake()
     {
-        Leo_UISceneManager.Instance.LoadSceneUI(Leo_UISceneManager.SceneUIType.MAIN);
+        //Leo_UISceneManager.Instance.LoadSceneUI(Leo_UISceneManager.SceneUIType.MAIN);
 
         if (FingerEvent.Instance != null)
         {
@@ -56,6 +62,29 @@ public class SceneMainController : MonoBehaviour {
 #endif
         */
         #endregion
+        if (mMainCityView==null)
+        {
+            Debug.Log("main UI load done!");
+            mMainCityView = UIRootController.Instance.LoadUIRoot(UIRootController.UIRootType.MAIN, OnLoadUIDone).GetComponent<UIRootMainCityView>();
+        }
+
+    }
+    /// <summary>
+    /// 该场景的UI加载完毕时
+    /// </summary>
+    private void OnLoadUIDone()
+    {
+
+        Debug.Log("main!");
+        //46课以后异步累加加载后，判断后一个场景是否加载完毕
+        if (DelegateDefine.Instance.OnSceneLoadDone != null)
+        {
+            
+            DelegateDefine.Instance.OnSceneLoadDone();
+        }
+
+        RoleController.Instance.SetRoleInfoMainCity();
+        SetNPCInfoMainCity();
 
         RoleManager.Instance.InitMyRole();  //现代版克隆角色方式
         if (GlobalInit.Instance.currentPlayer != null)
@@ -65,21 +94,31 @@ public class SceneMainController : MonoBehaviour {
 
         //Leo_UIPlayerInfo.Instance.SetPlayerInfo();
 
-        //46课以后异步累加加载后，判断后一个场景是否加载完毕
-        if (DelegateDefine.Instance.OnSceneLoadDone != null)
+    }
+
+
+
+    /// <summary>
+    /// 设置主城NPC的信息
+    /// </summary>
+    private void SetNPCInfoMainCity()
+    {
+        //当前测试NPC的坐标是-20,3,-28
+        for(int i = 0; i < NPCList.Length; i++)
         {
-            DelegateDefine.Instance.OnSceneLoadDone();
+            NPCList[i].GetComponent<NPCBehaviour>().InitRoleHeadUI();
         }
     }
 
     //点击UI时，人物还是会移动，增加UICamera的判断，当点击UI时，不让人物移动
     void OnPlayerClick()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;  //UI挡住ray，防止角色点击UI同时走路
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit[] hitAll = Physics.RaycastAll(ray, Mathf.Infinity, 1 << LayerMask.NameToLayer("Role"));
         if (hitAll.Length > 0)
         {
-            RoleController enemy = hitAll[0].collider.gameObject.GetComponent<RoleController>();
+            RoleBehaviour enemy = hitAll[0].collider.gameObject.GetComponent<RoleBehaviour>();
             if (enemy.currentRoleType == RoleType.ENEMY)
             {
                 //如果射线碰撞到了敌人，就跑到攻击范围内进行攻击
@@ -118,7 +157,8 @@ public class SceneMainController : MonoBehaviour {
     }
 
     /// <summary>
-    /// 摄像机左右、上下旋转角度
+    /// 摄像机左右、上下旋转角度(x)
+    /// 功能已更变，不再旋转摄像机，改为让角色前后左右移动
     /// </summary>
     /// <param name="dir"></param>
     void OnFingerDrag(FingerEvent.FingerDir dir)

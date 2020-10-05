@@ -54,5 +54,46 @@ public class Constant  {
     public const int ROLE_GET_ROLEINFO_FAIL = 4004;     //查询角色详情失败，原因：未找到对应的角色ID
     #endregion
 
+    #region UIResource本地路径相关
+    public const string PATH_QuestImg = "UIPrefabs/UIResources/QuestImg/";
+    public const string PATH_HeadImg = "UIPrefabs/UIResources/HeadImg/";
+    public const string PATH_ItemImg = "UIPrefabs/UIResources/ItemImg/";
+    
+    #endregion
 
+
+
+    #region 本地excel表读写相关dic的key
+    //章节相关
+    public const string EXCEL_ChapterId = "ChapterId";
+    public const string EXCEL_ChapterName = "ChapterName";
+
+    //关卡相关
+    public const string EXCEL_QuestId = "QuestId";
+    public const string EXCEL_QuestName = "QuestName";
+
+    public const string EXCEL_BasicRewardImg1 = "BasicRewardImg1";
+    public const string EXCEL_BasicRewardText1 = "BasicRewardText1";
+    public const string EXCEL_BasicRewardImg2 = "BasicRewardImg2";
+    public const string EXCEL_BasicRewardText2 = "BasicRewardText2";
+
+    public const string EXCEL_ItemRewardImg1 = "ItemRewardImg1";
+    public const string EXCEL_ItemRewardText1 = "ItemRewardText1";
+    public const string EXCEL_ItemRewardImg2 = "ItemRewardImg2";
+    public const string EXCEL_ItemRewardText2 = "ItemRewardText2";
+
+    #endregion
+
+
+    #region AB加载和真机使用路径相关
+    public const string AB_InitScene = @"download\scene\initScene\{0}.unity3d";
+
+#if UNITY_EDITOR   //编辑器调试时的路径
+    public static readonly string AB_localFilePath = Application.dataPath + "/../" + "AssetBundles/";
+#elif UNITY_ANDROID ||UNITY_STANDALONE_WIN  || UNITY_IPHONE
+    public static readonly string AB_localFilePath = Application.persistentDataPath + "/";
+#endif
+
+
+    #endregion
 }

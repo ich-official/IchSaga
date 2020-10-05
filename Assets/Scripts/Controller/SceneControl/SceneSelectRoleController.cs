@@ -17,7 +17,7 @@ using UnityEngine;
 public class SceneSelectRoleController : MonoBehaviour {
 
     private List<ClassEntity> mClassList;
-    private Dictionary<int, RoleController> mRoleCtrlDic = new Dictionary<int, RoleController>();    //角色prefab的字典
+    private Dictionary<int, RoleBehaviour> mRoleCtrlDic = new Dictionary<int, RoleBehaviour>();    //角色prefab的字典
 
     public Transform[] CreateRoleContainers;    //新建角色时的角色容器
 
@@ -41,7 +41,12 @@ public class SceneSelectRoleController : MonoBehaviour {
         #region 客户端操作
         if (DelegateDefine.Instance.OnSceneLoadDone != null)
         {
+            Debug.Log("执行了OnSceneLoadDone");
             DelegateDefine.Instance.OnSceneLoadDone();
+        }
+        else
+        {
+            Debug.Log("OnSceneLoadDone is null!");
         }
         if (mUISelectRoleView != null){
             mUISelectRoleView.DragView.OnDragEnable = OnDragEnable;
@@ -157,6 +162,7 @@ public class SceneSelectRoleController : MonoBehaviour {
         {
             //创建角色成功，开始登录进游戏的逻辑
             Debug.Log("add role success!!!");
+            mCurrentSelectedRoleId = proto.MsgCode;
             //UIDialogController.Instance.Show("创建角色成功");
             EnterGameReq(); //角色创建成功后直接发送进去游戏req
         }
@@ -322,6 +328,8 @@ public class SceneSelectRoleController : MonoBehaviour {
             Debug.Log("using path:" + tempPath);
             path = string.Format(tempPath, mClassList[i].PrefabName);
 #if LOCAL_LOAD_MODE
+            //GameObject obj=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
             GameObject obj=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
 #else
             //把class.xls里的职业全部读出，并在assetbundle下找到对应的prefab加载
@@ -399,7 +407,7 @@ public class SceneSelectRoleController : MonoBehaviour {
             roleObj.transform.localScale = Vector3.one;
             roleObj.transform.localPosition = Vector3.zero;
             roleObj.transform.localRotation = Quaternion.Euler(Vector3.zero);
-            RoleController roleCtrl = roleObj.GetComponent<RoleController>();
+            RoleBehaviour roleCtrl = roleObj.GetComponent<RoleBehaviour>();
             if (roleCtrl != null)
             {
                 mRoleCtrlDic.Add(mClassList[i].Id, roleCtrl);   //把rolecontroller添加进字典，实际就是把角色prefab添加进去
@@ -498,12 +506,15 @@ public class SceneSelectRoleController : MonoBehaviour {
     //选择角色：
     private void CloneMyRole(Account_LoginGameServerRespProto.RoleItem roleItem)
     {
+
         GameObject roleObj = Instantiate(GlobalInit.Instance.mClassDic[roleItem.RoleClass]);
         roleObj.transform.parent = CreateRoleContainers[0]; //加载已有角色时默认使用第一个台柱子
         roleObj.transform.localScale = Vector3.one;
         roleObj.transform.localPosition = Vector3.zero;
         roleObj.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        RoleController roleCtrl = roleObj.GetComponent<RoleController>();
+        RoleBehaviour roleCtrl = roleObj.GetComponent<RoleBehaviour>();
+        //全局缓存，每次使用直接加载
+        GlobalCache.Instance.CurrentRoleUIPrefab = GlobalInit.Instance.mClassDic[roleItem.RoleClass];
     }
 
 

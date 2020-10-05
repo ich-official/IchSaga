@@ -15,7 +15,7 @@ using System;
 /// 所有UI控件的基类，V层
 /// </summary>
 public class UIViewBase : MonoBehaviour {
-    public Action OnViewLoadDone;   //一个view加载完成后
+    public Action OnViewLoadDone;   //用此判断一个view加载是否完成，便于下一步赋值
     void Awake()
     {
         Button[] btns = GetComponentsInChildren<Button>(true);  //true:including hiding buttons

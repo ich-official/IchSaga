@@ -19,7 +19,7 @@ public class LoginController : SingletonBase<LoginController>
     /// </summary>
     public void OpenLoginPanel()
     {
-        UIViewManager.Instance.OpenPanel(UIWindowType.LOGIN);
+        UIViewManager.Instance.OpenPanel(UIPanelType.LOGIN);
     }
 
 }

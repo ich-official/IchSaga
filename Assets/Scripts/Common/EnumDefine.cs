@@ -14,9 +14,9 @@ using System.ComponentModel;
 //枚举类型汇总
 #region  ENUM加载窗口的类型
 /// <summary>
-/// 要加载哪个window
+/// 要加载哪个window（NGUI时）/Panel（UGUI时）
 /// </summary>
-public enum UIWindowType
+public enum UIPanelType
 {
     /// <summary>
     /// //不打开任何窗口
@@ -26,7 +26,9 @@ public enum UIWindowType
     REG,
     PLAYERINFO,
     EnterServer,    //进入大区，开始游戏
-    SelectServer    //选择大区
+    SelectServer,    //选择大区
+    RoleMenu,        //主城“角色”菜单
+    MainQuest       //主线任务的panel，UI设计参考了jjsg和网页my
 
 }
 #endregion

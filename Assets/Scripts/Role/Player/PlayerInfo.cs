@@ -17,11 +17,18 @@ public class PlayerInfo : RoleInfoBase {
 
     public int ClassId;
 
+
+
     public int TotalRechargeGem;
+
+    public int CurrEnergy;
+
+    public int MaxEnergy;
 
     public int Gem;
 
     public int Gold;
+
 
     #region 构造函数
     public PlayerInfo()
@@ -33,10 +40,13 @@ public class PlayerInfo : RoleInfoBase {
         RoleId = proto.RoldId;
         RoleNickName = proto.RoleNickName;
         ClassId = proto.ClassId;
+        VIPLevel = proto.VIPLevel;
         Level = proto.Level;
         TotalRechargeGem = proto.TotalRechargeGem;
         Gem = proto.Gem;
         Gold = proto.Gold;
+        CurrEnergy = proto.CurrEnergy;
+        MaxEnergy = proto.MaxEnergy;
         Exp = proto.Exp;
         MaxHP = proto.MaxHP;
         MaxMP = proto.MaxMP;

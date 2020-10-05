@@ -36,7 +36,7 @@ public class Leo_UIWindowRegController : Leo_UIWindowBase
 
         //Leo_WindowUIManager.Instance.CloseWindowUI(Leo_WindowUIType.REG);
         this.SelfClose();
-        mNextWindow = UIWindowType.LOGIN;
+        mNextWindow = UIPanelType.LOGIN;
     }
     void BtnReg()
     {

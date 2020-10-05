@@ -64,6 +64,11 @@ public class RoleEntity : ClientEntityBase
     public int Level { get; set; }
 
     /// <summary>
+    ///VIP等级 
+    /// </summary>
+    public int VIPLevel { get; set; }
+
+    /// <summary>
     ///累积充值 
     /// </summary>
     public int TotalRechargeGem { get; set; }
@@ -141,7 +146,7 @@ public class RoleEntity : ClientEntityBase
     /// <summary>
     ///最后进入的世界地图编号 
     /// </summary>
-    public int LastPassGameLevelId { get; set; }
+    public int LastPassGameQuestId { get; set; }
 
     /// <summary>
     ///最后进入的世界地图编号 

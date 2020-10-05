@@ -28,6 +28,7 @@ public class GlobalCache : SingletonBase<GlobalCache>
 
     #region 角色操作
     public int Role_CurrentRoleId;      //当前选择的角色ID
+    public GameObject CurrentRoleUIPrefab;    //当前游戏主角的prefab，在UI上使用
     #endregion
 
 }

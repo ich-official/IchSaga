@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
 /// 原名RoleHeadRoot
 /// </summary>
-public class Leo_UIModelHeadItems : MonoBehaviour {
+public class UIRoleHeadItems : MonoBehaviour {
 
-    public static Leo_UIModelHeadItems Instance;
+    public static UIRoleHeadItems Instance;
     void Awake()
     {
         Instance = this;

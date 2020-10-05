@@ -16,7 +16,7 @@ public class Leo_UIDepthManager : SingletonBase<Leo_UIDepthManager>
     //打开的窗口<=0个，就说明场景没有窗口，把深度值重置一下，下次从默认值开始计算
     public void CheckOpenedWindows()
     {
-        if (Leo_UIWindowManager.Instance.OpenedWindowsCount <= 0)
+        if (UIViewManagerNGUI.Instance.OpenedWindowsCount <= 0)
         {
             ResetDepth();
         }

@@ -15,17 +15,19 @@ using System.Collections.Generic;
 /// </summary>
 public class UIViewManager : SingletonBase<UIViewManager>
 {
-    private Dictionary<UIWindowType, ISystemController> dic = new Dictionary<UIWindowType, ISystemController>();
+    private Dictionary<UIPanelType, ISystemController> dic = new Dictionary<UIPanelType, ISystemController>();
 
-    //所有view都必须加入此dic中，loadview时就是通过此dic查询的
+    //所有UIPanelView都必须加入此dic中，loadview时就是通过此dic查询的
     public UIViewManager()
     {
-        dic.Add(UIWindowType.LOGIN, AccountController.Instance);
-        dic.Add(UIWindowType.REG, AccountController.Instance);
-        dic.Add(UIWindowType.EnterServer, GameServerController.Instance);
-        dic.Add(UIWindowType.SelectServer, GameServerController.Instance);
+        dic.Add(UIPanelType.LOGIN, AccountController.Instance);
+        dic.Add(UIPanelType.REG, AccountController.Instance);
+        dic.Add(UIPanelType.EnterServer, GameServerController.Instance);
+        dic.Add(UIPanelType.SelectServer, GameServerController.Instance);
+        dic.Add(UIPanelType.RoleMenu, RoleController.Instance);
+        dic.Add(UIPanelType.MainQuest, GameQuestController.Instance);
     }
-    public void OpenPanel(UIWindowType windowType)
+    public void OpenPanel(UIPanelType windowType)
     {
         dic[windowType].OpenView(windowType);
     }

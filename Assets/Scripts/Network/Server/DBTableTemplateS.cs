@@ -76,10 +76,13 @@ public class DBTableTemplateS : SingletonBase<DBTableTemplateS> {
         DBTemplate.Add("NickName", "Ich");
         DBTemplate.Add("Gender", "1");
         DBTemplate.Add("Level", "1");
+        DBTemplate.Add("VIPLevel", "1");
         DBTemplate.Add("TotalRechargeGem", "0");
         DBTemplate.Add("Gem", "0");
         DBTemplate.Add("Gold", "0");
         DBTemplate.Add("Exp", "0");
+        DBTemplate.Add("CurrEnergy", "20");
+        DBTemplate.Add("MaxEnergy", "20");
         DBTemplate.Add("MaxHP", "100");
         DBTemplate.Add("MaxMP", "20");
         DBTemplate.Add("CurrHP", "100");
@@ -91,7 +94,7 @@ public class DBTableTemplateS : SingletonBase<DBTableTemplateS> {
         DBTemplate.Add("Cri", "5");
         DBTemplate.Add("Res", "0");
         DBTemplate.Add("SumDPS", "1000");
-        DBTemplate.Add("LastPassGameLevelId", "1"); //上次通关的关卡ID
+        DBTemplate.Add("LastPassGameQuestId", "1"); //上次通关的关卡ID
         DBTemplate.Add("LastInWorldMapId", "1");    //上次通关的世界地图ID
         DBTemplate.Add("LastInWorldMapPos", "1");   //上次角色所在世界地图的坐标
         DBTemplate.Add("CreateTime", DateTime.Now.ToString("u"));

@@ -41,6 +41,7 @@ public class RoleS  {
     /// </summary>
     public int Level { get; set; }
 
+    public int VIPLevel { get; set; }
     /// <summary>
     /// 角色职业
     /// </summary>

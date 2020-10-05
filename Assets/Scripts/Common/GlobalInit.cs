@@ -30,7 +30,7 @@ public class GlobalInit : MonoBehaviour {
     [HideInInspector]
     public PlayerInfo myRoleInfo;    //我的角色详情
     [HideInInspector]
-    public RoleController currentPlayer;    //我的角色控制器
+    public RoleBehaviour currentPlayer;    //我的角色控制器
     /// <summary>
     /// UITween曲线，NGUI也可以用
     /// </summary>

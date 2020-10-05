@@ -23,7 +23,7 @@ public class UIRootController : SingletonBase<UIRootController>{
         MAIN
     }
 
-    public GameObject LoadUIRoot(UIRootType type)
+    public GameObject LoadUIRoot(UIRootType type,System.Action onViewLoadDone=null)
     {
         GameObject obj = null;
         switch (type)
@@ -37,7 +37,7 @@ public class UIRootController : SingletonBase<UIRootController>{
                 break;
             case UIRootType.MAIN:
                 obj = ResourcesManager.Instance.
-                    Load(ResourcesManager.ResourceType.UIRoot, "UIRoot_MainUGUI");
+                    Load(ResourcesManager.ResourceType.UIRoot, "UIRoot_MainCityUGUI");
                 currentScene = obj.GetComponent<UIRootViewBase>();
                 break;
             case UIRootType.SELECT_ROLE:
@@ -46,7 +46,7 @@ public class UIRootController : SingletonBase<UIRootController>{
                 currentScene = obj.GetComponent<UIRootViewBase>();
                 break;
         }
-
+        currentScene.OnViewLoadDone = onViewLoadDone;   //带一个委托，用于判断这个UI是否加载完毕
         return obj;
     }
 

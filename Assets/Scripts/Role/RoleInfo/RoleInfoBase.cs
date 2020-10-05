@@ -45,7 +45,7 @@ public class RoleInfoBase  {
     /// </summary>
     public int Level;
 
-
+    public int VIPLevel;
     /// <summary>
     ///经验 
     /// </summary>

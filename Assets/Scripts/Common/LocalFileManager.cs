@@ -17,11 +17,7 @@ using System.IO;
 /// </summary>
 public class LocalFileManager : SingletonBase<LocalFileManager>
 {
-#if UNITY_EDITOR   //编辑器调试时的路径
-    public readonly string localFilePath = Application.dataPath + "/../" + "AssetBundles/";
-#elif UNITY_ANDROID ||UNITY_STANDALONE_WIN  || UNITY_IPHONE
-    public readonly string localFilePath = Application.persistentDataPath + "/";
-#endif
+
 
 
     /// <summary>

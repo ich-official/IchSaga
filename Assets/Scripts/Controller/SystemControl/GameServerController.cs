@@ -190,14 +190,14 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
 
 
     #region 打开/关闭界面
-    public void OpenView(UIWindowType windowType)
+    public void OpenView(UIPanelType windowType)
     {
         switch (windowType)
         {
-            case UIWindowType.EnterServer:
+            case UIPanelType.EnterServer:
                 OpenEnterServerView();
                 break;
-            case UIWindowType.SelectServer:
+            case UIPanelType.SelectServer:
                 OpenSelectServerView();
                 break;
         }
@@ -207,7 +207,7 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
     /// </summary>
     private void OpenEnterServerView()
     {
-        mEnterServerView = Leo_UIWindowManager.Instance.OpenWindowUI(UIWindowType.EnterServer, true).GetComponent<UIPanelEnterServerView>();
+        mEnterServerView = UIViewManagerNGUI.Instance.OpenWindowUI(UIPanelType.EnterServer, true).GetComponent<UIPanelEnterServerView>();
         mEnterServerView.SetText(GlobalCache.Instance.Account_LastLoginServerName);
         //GlobalCache.Instance.Account_LastLoginServerName = null;  //这句放在登陆界面销毁时再释放
         //mEnterServerView.OnViewClose = () => { OpenRegView(); };
@@ -218,7 +218,7 @@ public class GameServerController : ControllerBase<GameServerController>, ISyste
     /// </summary>
     private void OpenSelectServerView()
     {
-        mSelectServerView = Leo_UIWindowManager.Instance.OpenWindowUI(UIWindowType.SelectServer, true).GetComponent<UIPanelSelectServerView>();
+        mSelectServerView = UIViewManagerNGUI.Instance.OpenWindowUI(UIPanelType.SelectServer, true).GetComponent<UIPanelSelectServerView>();
         //mSelectServerView.OnViewClose = () => { OpenRegView(); };
     }
 

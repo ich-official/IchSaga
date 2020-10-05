@@ -23,9 +23,12 @@ public class RoleManager : SingletonBase<RoleManager>
         {
             if (GlobalInit.Instance.myRoleInfo != null)
             {
-                GameObject myRoleObj = Object.Instantiate(GlobalInit.Instance.mClassDic[GlobalInit.Instance.myRoleInfo.ClassId+1]);//excel里编号从1开始，这里+1，下标和excel保持一致
+                GameObject myRoleObj = Object.Instantiate(GlobalInit.Instance.mClassDic[GlobalInit.Instance.myRoleInfo.ClassId]);//excel里编号从1开始，xml数据库保持和xls一致
+                myRoleObj.transform.eulerAngles = new Vector3(0, 90, 0);
                 Object.DontDestroyOnLoad(myRoleObj);
-                GlobalInit.Instance.currentPlayer = myRoleObj.GetComponent<RoleController>();
+                GlobalInit.Instance.currentPlayer = myRoleObj.GetComponent<RoleBehaviour>();
+                Debug.Log("currentPlayer:"+ GlobalInit.Instance.currentPlayer);
+
                 GlobalInit.Instance.currentPlayer.Init(RoleType.PLAYER, GlobalInit.Instance.myRoleInfo, new PlayerAI_Battle(GlobalInit.Instance.currentPlayer));
             }
             isInitMyRole = true;
@@ -38,6 +41,12 @@ public class RoleManager : SingletonBase<RoleManager>
     {
         return ResourcesManager.Instance.Load(ResourcesManager.ResourceType.ROLE, name, true);
 
+    }
+
+    public Sprite LoadRoleHeadImg(string HeadImgName)
+    {
+        return GameUtil.LoadSprite(Constant.PATH_HeadImg+ HeadImgName);
+        //return Resources.Load(string.Format("UIPrefabs/UIResources/HeadImg/{0}", HeadImgName), typeof(Sprite)) as Sprite;
     }
    
     public override void Dispose()

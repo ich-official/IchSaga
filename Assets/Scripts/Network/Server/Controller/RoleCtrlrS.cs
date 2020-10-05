@@ -148,12 +148,26 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
         //role.Client_Socket.SendMsg(proto.ToArray());
     }
 
+    /// <summary>
+    /// 添加角色成功时，msgCode返回当前角色的ID
+    /// </summary>
+    /// <param name="classId"></param>
+    /// <param name="nickName"></param>
+    /// <param name="gameServerId"></param>
     private void AddRoleServerResp(int classId,string nickName,int gameServerId)
     {
         Account_AddRoleRespProto proto = new Account_AddRoleRespProto();
-        bool isSuccess = RoleDBModelServer.Instance.AddRole(classId,nickName,gameServerId);
-        proto.IsSuccess = isSuccess;
-        if (isSuccess == false) proto.MsgCode = Constant.ROLE_ADD_FAIL;
+        int currentAddId = RoleDBModelServer.Instance.AddRole(classId,nickName,gameServerId,1);
+        if (currentAddId == -1)
+        {
+            proto.IsSuccess = false;
+            proto.MsgCode = Constant.ROLE_ADD_FAIL;
+        }
+        else
+        {
+            proto.IsSuccess = true;
+            proto.MsgCode = currentAddId;
+        }
         SocketManagerServer.Instance.SendMessageToClient(proto.ToArray());
     }
 
@@ -188,6 +202,7 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
         {
             #region 角色属性详情
             proto.IsSuccess = true;
+            proto.ClassId = (byte)int.Parse(result["ClassId"]);
             proto.Attack = int.Parse(result["Attack"]);
             proto.Cri = int.Parse(result["Cri"]);
             proto.CurrHP = int.Parse(result["CurrHP"]);
@@ -210,12 +225,15 @@ public class RoleCtrlrS : SingletonBase<RoleCtrlrS> ,IDisposable{
             //proto.Equip_ShoeTableId = int.Parse(result["Equip_ShoeTableId"]);
             proto.Equip_Weapon = int.Parse(result["Equip_WeaponId"]);
             //proto.Equip_WeaponTableId = int.Parse(result["Equip_WeaponTableId"]);
+            proto.CurrEnergy = int.Parse(result["CurrEnergy"]);
+            proto.MaxEnergy = int.Parse(result["MaxEnergy"]);
             proto.Exp = int.Parse(result["Exp"]);
             proto.Gold = int.Parse(result["Gold"]);
             proto.Hit = int.Parse(result["Hit"]);
             proto.LastInWorldMapId = int.Parse(result["LastInWorldMapId"]);
             proto.LastInWorldMapPos = result["LastInWorldMapPos"];
             proto.Level = int.Parse(result["Level"]);
+            proto.VIPLevel = int.Parse(result["VIPLevel"]);
             proto.MaxHP = int.Parse(result["MaxHP"]);
             proto.MaxMP = int.Parse(result["MaxMP"]);
             proto.Gem = int.Parse(result["Gem"]);

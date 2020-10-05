@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using DG.Tweening;
 
 /// <summary>
-/// 加载窗口、设置窗口挂点、设置窗口打开动画方式，原名WindowUIMgr
+/// 加载窗口、设置窗口挂点、设置窗口打开动画方式，=WindowUIMgr(x),UIViewUtil
+/// NGUI时期使用的脚本，当下UGUI里仍然使用此类中一些没有过时的方法
 /// </summary>
-public class Leo_UIWindowManager : SingletonBase<Leo_UIWindowManager>
+public class UIViewManagerNGUI : SingletonBase<UIViewManagerNGUI>
 {   
    // Dictionary<Leo_UIWindowType, Leo_UIWindowBase> mWindowDic = new Dictionary<Leo_UIWindowType, Leo_UIWindowBase>();
-    Dictionary<UIWindowType, UIPanelViewBase> mWindowDic = new Dictionary<UIWindowType, UIPanelViewBase>();
+    Dictionary<UIPanelType, UIPanelViewBase> mWindowDic = new Dictionary<UIPanelType, UIPanelViewBase>();
    //记录字典中存了几个对象，相当于场景中打开了几个窗口
     public int OpenedWindowsCount
     {
@@ -19,7 +20,7 @@ public class Leo_UIWindowManager : SingletonBase<Leo_UIWindowManager>
         }
     }
     #region 打开与关闭窗口
-    public GameObject OpenWindowUI(UIWindowType windowType,
+    public GameObject OpenWindowUI(UIPanelType windowType,
         //以下2个参数不应该被随便修改，把他们移到Leo_UIWindowBase中统一配置
        /* Leo_AnchorPosition pos = Leo_AnchorPosition.CENTER,
         Leo_ShowWindowStyle style = Leo_ShowWindowStyle.NONE,*/bool isUGUI=true, bool isOpenWindow = true)
@@ -37,13 +38,13 @@ public class Leo_UIWindowManager : SingletonBase<Leo_UIWindowManager>
         else
         {
             //判断当前设置是否是不打开其他窗口
-            if (windowType.Equals(UIWindowType.NONE))
+            if (windowType.Equals(UIPanelType.NONE))
             {
                 Debug.Log("已设置为不打开窗口!");
                 return null;
             }
 
-            #region UGUI后Leo自行修改
+            #region UGUI后自行修改
             if (isUGUI)
             {
                 //生成一个预制体的精简写法，需保证格式化内容与预制体名一致
@@ -118,11 +119,19 @@ public class Leo_UIWindowManager : SingletonBase<Leo_UIWindowManager>
         return obj;
     }
 
-    public void CloseWindowUI(UIWindowType windowType, bool isOpenWindow = false)
+    public void CloseWindowUI(UIPanelType windowType, bool isOpenWindow = false)
     {
         if (mWindowDic.ContainsKey(windowType))
         {
             ShowWindow(mWindowDic[windowType], false);
+        }
+    }
+    
+    public void CloseAllPanels()
+    {
+        if (mWindowDic != null)
+        {
+            mWindowDic.Clear();
         }
     }
     #endregion

@@ -101,6 +101,24 @@ public class RoleDBModelServer : DBModelServerBase
         return results;
         
     }
+
+    public int AddRole(int classId, string nickName, int gameServerId,int status)
+    {
+
+        bool isSuccess = AddRole(classId,  nickName, gameServerId);
+        if (isSuccess)
+        {
+            return XMLHelper.Instance.GetLastAddId();
+        }
+        else
+        {
+            return -1;
+        }
+        
+
+    }
+
+
     /// <summary>
     /// 删除角色不是真的从数据库中删除数据，而是把角色的status状态改为0（删除状态）
     /// </summary>

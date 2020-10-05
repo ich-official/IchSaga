@@ -17,7 +17,7 @@ public class EnemyAI_Battle : MonoBehaviour,IRoleAI  {
     private float mNextPatrolTime = 0; //下次巡逻时间
 
     private float mNextAttackTime = 0; //下次攻击时间
-    public RoleController CurrentRole
+    public RoleBehaviour CurrentRole
     {
         get;
         set;
@@ -88,7 +88,7 @@ public class EnemyAI_Battle : MonoBehaviour,IRoleAI  {
 
     }
 
-    public EnemyAI_Battle(RoleController controller)
+    public EnemyAI_Battle(RoleBehaviour controller)
     {
         CurrentRole = controller;
     }
