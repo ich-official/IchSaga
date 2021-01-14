@@ -5,8 +5,8 @@ If you have some great ideas about this game, send e-mail to ich_official@163.co
 
 ## Update log
 ### 2020.10.05
-  1.Complete quest module，add some excel files like quest, reward, enemy etc。
-  2.Fix bugs.
+  1. Complete quest module，add some excel files like quest, reward, enemy etc。
+  2. Fix bugs.
 ### 2020.07.31
   Add auto path-finding module.
 ### 2020.07.12
@@ -14,8 +14,8 @@ If you have some great ideas about this game, send e-mail to ich_official@163.co
 ### 2020.06.21
   Change folder structure Scripts/Server->Scripts/Network/Server
 ### 2020.06.13
-  1.Update packing AssetBundle utils，now support copy AssetBundles file to StreamingAsset directly.
-  2.Replace local DB file system（sqlite->xml）.
+  1. Update packing AssetBundle utils，now support copy AssetBundles file to StreamingAsset directly.
+  2. Replace local DB file system（sqlite->xml）.
 ### 2020.06.06
   Upload latest no-bug scripts and new functions
 ### 2020.05.25
@@ -33,8 +33,8 @@ If you have some great ideas about this game, send e-mail to ich_official@163.co
 
 ## 更新日志
 ### 2020.10.05
-  1.完善了关卡模块，配置了前几章的关卡、奖励、怪物表。
-  2.修复一些bug。
+  1. 完善了关卡模块，配置了前几章的关卡、奖励、怪物表。
+  2. 修复一些bug。
 ### 2020.07.31
   增加了自动寻路功能
 ### 2020.07.12
@@ -42,8 +42,8 @@ If you have some great ideas about this game, send e-mail to ich_official@163.co
 ### 2020.06.21
   更新了目录结构，把Server、Proto文件夹归并到Network文件夹下。
 ### 2020.06.13
-  1.更新了打包AB资源的方法，支持直接拷贝资源到StreamingAsset文件夹下的功能。
-  2.替换了本地数据库读取方式（sqlite->xml）。
+  1. 更新了打包AB资源的方法，支持直接拷贝资源到StreamingAsset文件夹下的功能。
+  2. 替换了本地数据库读取方式（sqlite->xml）。
 ### 2020.06.06
   上传了最新无bug的代码，以及添加了一些新功能。
 ### 2020.05.25
